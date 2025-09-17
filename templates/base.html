@@ -12,6 +12,24 @@
     {% include 'header.html' %}
 
     <main class="flex-1">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="fixed top-4 right-4 z-50 space-y-2">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} shadow-lg">
+                            <span>{{ message }}</span>
+                            <button class="btn btn-sm btn-ghost btn-circle" onclick="this.parentElement.remove()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
         {% block content %}{% endblock %}
     </main>
 

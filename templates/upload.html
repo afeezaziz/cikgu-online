@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Fail - SPM Online Learning{% endblock %}
+
+{% block content %}
+<section class="py-8 bg-base-100">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-base-content mb-2">Upload Fail Pembelajaran</h1>
+            <p class="text-base-content/70">Upload nota, latihan, atau bahan pembelajaran anda</p>
+        </div>
+
+        <div class="card bg-base-200">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="form-control mb-6">
+                        <label class="label">
+                            <span class="label-text font-semibold">Pilih Fail</span>
+                        </label>
+                        <input type="file" name="file" class="file-input file-input-bordered file-input-primary w-full" required>
+                        <label class="label">
+                            <span class="label-text-alt text-base-content/70">Jenis fail yang dibenarkan: PDF, DOC, DOCX, TXT, JPG, PNG (Maksimum 16MB)</span>
+                        </label>
+                    </div>
+
+                    <div class="form-control mb-6">
+                        <label class="label">
+                            <span class="label-text font-semibold">Mata Pelajaran</span>
+                        </label>
+                        <select name="subject" class="select select-bordered select-primary w-full">
+                            <option value="General">General</option>
+                            <option value="bahasa-melayu">Bahasa Melayu</option>
+                            <option value="english">English</option>
+                            <option value="matematik">Matematik</option>
+                            <option value="sains">Sains</option>
+                            <option value="pendidikan-islam">Pendidikan Islam</option>
+                            <option value="sejarah">Sejarah</option>
+                            <option value="matematik-tambahan">Matematik Tambahan</option>
+                            <option value="kimia">Kimia</option>
+                            <option value="fizik">Fizik</option>
+                        </select>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">Batal</a>
+                        <button type="submit" class="btn btn-primary">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                            Upload Fail
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Upload Tips -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="card bg-primary text-primary-content">
+                <div class="card-body">
+                    <h3 class="card-title text-lg mb-3">💡 Tips Upload</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li>• Pastikan fail yang diupload berkaitan dengan pembelajaran SPM</li>
+                        <li>• Beri nama fail yang deskriptif untuk memudahkan rujukan</li>
+                        <li>• Pilih mata pelajaran yang betul untuk fail tersebut</li>
+                        <li>• Fail yang lebih besar akan mengambil masa lebih lama untuk upload</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card bg-secondary text-secondary-content">
+                <div class="card-body">
+                    <h3 class="card-title text-lg mb-3">📁 Jenis Fail</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li>• <strong>Dokumen:</strong> PDF, DOC, DOCX, TXT</li>
+                        <li>• <strong>Gambar:</strong> JPG, PNG, GIF</li>
+                        <li>• <strong>Huruf:</strong> Saiz maksimum 16MB</li>
+                        <li>• <strong>Ciri keselamatan:</strong> Fail diencrypt dan disimpan dengan selamat</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

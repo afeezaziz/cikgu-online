@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}Kemajuan Pembelajaran - SPM Online Learning{% endblock %}
+
+{% block content %}
+<section class="py-8 bg-base-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-base-content mb-2">Kemajuan Pembelajaran</h1>
+            <p class="text-base-content/70">Pantau perkembangan pembelajaran anda</p>
+        </div>
+
+        <!-- Progress Overview -->
+        <div class="card bg-base-200 mb-8">
+            <div class="card-body">
+                <h2 class="card-title text-xl mb-4">Ringkasan Kemajuan</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary">{{ progress|length }}</div>
+                        <div class="text-sm text-base-content/70">Topik Total</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-success">{{ progress|selectattr('completed')|list|length }}</div>
+                        <div class="text-sm text-base-content/70">Selesai</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-warning">{{ progress|rejectattr('completed')|list|length }}</div>
+                        <div class="text-sm text-base-content/70">Dalam Proses</div>
+                    </div>
+                    <div class="text-center">
+                        {% set total_score = progress|sum(attribute='score') %}
+                        {% set avg_score = (total_score / progress|length)|round(1) if progress|length > 0 else 0 %}
+                        <div class="text-3xl font-bold text-info">{{ avg_score }}%</div>
+                        <div class="text-sm text-base-content/70">Purata Markah</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress by Subject -->
+        <div class="card bg-base-200 mb-8">
+            <div class="card-body">
+                <h2 class="card-title text-xl mb-6">Kemajuan mengikut Mata Pelajaran</h2>
+
+                {% set subjects = progress|map(attribute='subject')|unique|list %}
+                {% for subject in subjects %}
+                {% set subject_progress = progress|selectattr('subject', 'equalto', subject)|list %}
+
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold mb-4">{{ subject.title() }}</h3>
+                    <div class="overflow-x-auto">
+                        <table class="table table-zebra">
+                            <thead>
+                                <tr>
+                                    <th>Topik</th>
+                                    <th>Status</th>
+                                    <th>Markah</th>
+                                    <th>Masa Dihadiri</th>
+                                    <th>Akses Terakhir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in subject_progress %}
+                                <tr>
+                                    <td class="font-medium">{{ item.topic }}</td>
+                                    <td>
+                                        {% if item.completed %}
+                                            <span class="badge badge-success">Selesai</span>
+                                        {% else %}
+                                            <span class="badge badge-warning">Dalam Proses</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center">
+                                            <div class="w-16 bg-base-300 rounded-full h-2 mr-2">
+                                                <div class="bg-primary h-2 rounded-full" style="width: {{ item.score }}%"></div>
+                                            </div>
+                                            <span class="text-sm">{{ item.score }}%</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ item.time_spent }} minit</td>
+                                    <td class="text-sm">{{ item.last_accessed.strftime('%d %b %Y, %I:%M %p') }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endfor %}
+
+                {% if not progress %}
+                <div class="text-center py-8">
+                    <div class="text-6xl mb-4">📊</div>
+                    <h3 class="text-xl font-semibold mb-2">Belum ada kemajuan</h3>
+                    <p class="text-base-content/70 mb-4">Mula pembelajaran anda untuk melihat kemajuan di sini</p>
+                    <a href="{{ url_for('subjects') }}" class="btn btn-primary">Mula Belajar</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Study Tips -->
+        <div class="card bg-primary text-primary-content">
+            <div class="card-body">
+                <h2 class="card-title text-xl mb-4">🎯 Tips untuk Kejayaan</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold mb-2">Tetapkan Matlamat Harian</h3>
+                        <p class="text-primary-content/80 text-sm">Belajar 1-2 jam setiap hari untuk konsistensi yang lebih baik</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Fokus pada Topik Lemah</h3>
+                        <p class="text-primary-content/80 text-sm">Berikan lebih masa untuk topik yang anda kurang mahir</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Latihan Secara Berkala</h3>
+                        <p class="text-primary-content/80 text-sm">Buat ulangkaji untuk mengukuhkan ingatan</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Tanda Kemajuan</h3>
+                        <p class="text-primary-content/80 text-sm">Rekod setiap sesi pembelajaran untuk menjejak peningkatan</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

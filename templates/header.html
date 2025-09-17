@@ -10,6 +10,11 @@
                 <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                     <li><a href="{{ url_for('home') }}" class="text-primary">Laman Utama</a></li>
                     <li><a href="{{ url_for('subjects') }}" class="text-primary">Mata Pelajaran</a></li>
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('dashboard') }}" class="text-primary">Dashboard</a></li>
+                    <li><a href="{{ url_for('progress') }}" class="text-primary">Kemajuan</a></li>
+                    <li><a href="{{ url_for('upload_file') }}" class="text-primary">Upload</a></li>
+                    {% endif %}
                     <li><a href="{{ url_for('about') }}" class="text-primary">Tentang Kami</a></li>
                 </ul>
             </div>
@@ -24,15 +29,36 @@
             <ul class="menu menu-horizontal px-1">
                 <li><a href="{{ url_for('home') }}" class="text-primary-content font-medium">Laman Utama</a></li>
                 <li><a href="{{ url_for('subjects') }}" class="text-primary-content font-medium">Mata Pelajaran</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('dashboard') }}" class="text-primary-content font-medium">Dashboard</a></li>
+                <li><a href="{{ url_for('progress') }}" class="text-primary-content font-medium">Kemajuan</a></li>
+                {% endif %}
                 <li><a href="{{ url_for('about') }}" class="text-primary-content font-medium">Tentang Kami</a></li>
             </ul>
         </div>
         <div class="navbar-end">
-            <button class="btn btn-ghost btn-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-            </button>
+            {% if current_user.is_authenticated %}
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                    {% if current_user.picture %}
+                        <img src="{{ current_user.picture }}" alt="Profile" class="w-8 h-8 rounded-full">
+                    {% else %}
+                        <div class="w-8 h-8 rounded-full bg-primary-content flex items-center justify-center">
+                            <span class="text-primary font-semibold text-sm">{{ current_user.name[0].upper() }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                    <li class="menu-title">{{ current_user.name }}</li>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('upload_file') }}">Upload Fail</a></li>
+                    <li><a href="{{ url_for('progress') }}">Kemajuan</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </div>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="btn btn-secondary">Login</a>
+            {% endif %}
         </div>
     </div>
 </header>
