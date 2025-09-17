@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}{{ subject }} - Bab {{ chapter_number }}: {{ chapter_title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-6">
+        <ol class="flex items-center space-x-2">
+            <li><a href="{{ url_for('subjects') }}" class="text-primary hover:underline">Mata Pelajaran</a></li>
+            <li><span class="text-gray-400">/</span></li>
+            <li><a href="{{ url_for('subject_detail', subject=subject) }}" class="text-primary hover:underline">{{ subject }}</a></li>
+            <li><span class="text-gray-400">/</span></li>
+            <li><span class="text-gray-600 font-medium">Bab {{ chapter_number }}</span></li>
+        </ol>
+    </nav>
+
+    <!-- Chapter Header -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Bab {{ chapter_number }}: {{ chapter_title }}</h1>
+                <p class="text-gray-600 text-lg">{{ chapter_description }}</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="badge badge-lg badge-primary">{{ subject }}</span>
+                <div class="text-right">
+                    <div class="text-sm text-gray-500">Tempoh Jangkaan</div>
+                    <div class="font-semibold">{{ estimated_time }} minit</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        {% if current_user.is_authenticated %}
+        <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-primary h-2 rounded-full" style="width: {{ progress_percentage }}%"></div>
+        </div>
+        <div class="flex justify-between mt-2 text-sm text-gray-600">
+            <span>{{ progress_percentage }}% lengkap</span>
+            <span>{{ completed_subtopics }}/{{ total_subtopics }} subtopik</span>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Study Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- Main Content -->
+        <div class="lg:col-span-3">
+            <!-- Content Sections -->
+            <div class="space-y-6">
+                {% for section in sections %}
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6" id="section-{{ loop.index }}">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold text-gray-900">{{ section.title }}</h2>
+                        {% if current_user.is_authenticated %}
+                        <button class="btn btn-sm btn-outline btn-primary" onclick="markSectionComplete('{{ section.title }}', {{ loop.index }})">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Selesai
+                        </button>
+                        {% endif %}
+                    </div>
+
+                    <div class="prose max-w-none">
+                        {{ section.content | safe }}
+                    </div>
+
+                    <!-- Key Points -->
+                    {% if section.key_points %}
+                    <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                        <h3 class="font-semibold text-blue-900 mb-2">Poin Penting:</h3>
+                        <ul class="list-disc list-inside text-blue-800 space-y-1">
+                            {% for point in section.key_points %}
+                            <li>{{ point }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <!-- Example Section -->
+                    {% if section.examples %}
+                    <div class="mt-4 p-4 bg-green-50 rounded-lg">
+                        <h3 class="font-semibold text-green-900 mb-2">Contoh:</h3>
+                        {% for example in section.examples %}
+                        <div class="mb-3">
+                            <div class="text-green-800 mb-1">{{ example.question }}</div>
+                            <div class="text-green-700 font-medium">Jawapan: {{ example.answer }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="lg:col-span-1">
+            <!-- Navigation -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
+                <h3 class="font-semibold text-gray-900 mb-3">Navigasi Bab</h3>
+                <div class="space-y-2">
+                    {% for section in sections %}
+                    <a href="#section-{{ loop.index }}" class="block p-2 rounded hover:bg-gray-100 text-sm text-gray-700 hover:text-primary">
+                        {{ loop.index }}. {{ section.title }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
+                <h3 class="font-semibold text-gray-900 mb-3">Tindakan Pantas</h3>
+                <div class="space-y-2">
+                    <a href="{{ url_for('mcq_assessment', subject=subject, chapter=chapter_number) }}" class="btn btn-block btn-primary btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        Ujian MCQ
+                    </a>
+                    <a href="{{ url_for('subjective_assessment', subject=subject, chapter=chapter_number) }}" class="btn btn-block btn-secondary btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                        Soalan Subjektif
+                    </a>
+                    <a href="{{ url_for('study_notes', subject=subject, chapter=chapter_number) }}" class="btn btn-block btn-outline btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        Nota Pembelajaran
+                    </a>
+                </div>
+            </div>
+
+            <!-- Study Tips -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                <h3 class="font-semibold text-gray-900 mb-3">Tips Pembelajaran</h3>
+                <div class="space-y-2 text-sm text-gray-600">
+                    <div class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Baca dengan teliti setiap bahagian</span>
+                    </div>
+                    <div class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Cuba contoh yang diberikan</span>
+                    </div>
+                    <div class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Amalkan dengan latihan MCQ</span>
+                    </div>
+                    <div class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Tuliskan jawapan subjektif</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chapter Navigation -->
+    <div class="mt-8 flex justify-between items-center">
+        {% if previous_chapter %}
+        <a href="{{ url_for('chapter', subject=subject, chapter=previous_chapter) }}" class="btn btn-outline">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Bab Sebelumnya
+        </a>
+        {% else %}
+        <div></div>
+        {% endif %}
+
+        {% if next_chapter %}
+        <a href="{{ url_for('chapter', subject=subject, chapter=next_chapter) }}" class="btn btn-primary">
+            Bab Seterusnya
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </a>
+        {% else %}
+        <a href="{{ url_for('subject_detail', subject=subject) }}" class="btn btn-primary">
+            Kembali ke {{ subject }}
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function markSectionComplete(sectionTitle, sectionIndex) {
+    if (!confirm('Tandakan bahagian ini sebagai lengkap?')) {
+        return;
+    }
+
+    fetch('/api/progress', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            section: sectionTitle,
+            section_index: sectionIndex,
+            subject: '{{ subject }}',
+            chapter: {{ chapter_number }}
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Bahagian ditandakan sebagai lengkap!');
+            location.reload();
+        } else {
+            alert('Ralat: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ralat semasa menyimpan kemajuan');
+    });
+}
+</script>
+{% endblock %}

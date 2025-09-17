@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block title %}Ujian MCQ - {{ subject }} Bab {{ chapter }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-6">
+        <ol class="flex items-center space-x-2">
+            <li><a href="{{ url_for('subjects') }}" class="text-primary hover:underline">Mata Pelajaran</a></li>
+            <li><span class="text-gray-400">/</span></li>
+            <li><a href="{{ url_for('subject_detail', subject=subject) }}" class="text-primary hover:underline">{{ subject }}</a></li>
+            <li><span class="text-gray-400">/</span></li>
+            <li><a href="{{ url_for('chapter', subject=subject, chapter=chapter) }}" class="text-primary hover:underline">Bab {{ chapter }}</a></li>
+            <li><span class="text-gray-400">/</span></li>
+            <li><span class="text-gray-600 font-medium">Ujian MCQ</span></li>
+        </ol>
+    </nav>
+
+    <!-- Assessment Header -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Ujian Soalan Objektif (MCQ)</h1>
+                <p class="text-gray-600">{{ subject }} - Bab {{ chapter }}</p>
+            </div>
+            <div class="text-right">
+                <div class="text-sm text-gray-500">Masa Diperuntukkan</div>
+                <div class="font-semibold" id="timer">{{ time_limit }}:00</div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+            <div class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%" id="progress-bar"></div>
+        </div>
+        <div class="flex justify-between text-sm text-gray-600">
+            <span>Soalan <span id="current-question">1</span> daripada {{ total_questions }}</span>
+            <span><span id="answered-count">0</span> dijawab</span>
+        </div>
+    </div>
+
+    <!-- Instructions -->
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <h3 class="font-semibold text-blue-900 mb-2">Arahan:</h3>
+        <ul class="text-blue-800 space-y-1 text-sm">
+            <li>• Pilih satu jawapan yang paling sesuai untuk setiap soalan</li>
+            <li>• Anda boleh menukar jawapan sebelum menyerahkan</li>
+            <li>• Pastikan menjawab semua soalan sebelum masa tamat</li>
+            <li>• Klik "Serahkan" untuk menghantar jawapan anda</li>
+        </ul>
+    </div>
+
+    <!-- Quiz Form -->
+    <form id="quiz-form" class="space-y-6">
+        <!-- Questions -->
+        <div id="questions-container" class="space-y-8">
+            {% for question in questions %}
+            <div class="question-card bg-white rounded-lg shadow-sm border border-gray-200 p-6" data-question-id="{{ question.id }}">
+                <div class="flex items-start justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        Soalan {{ loop.index }}: {{ question.question }}
+                    </h3>
+                    <span class="question-status text-sm px-2 py-1 rounded-full bg-gray-100 text-gray-600">
+                        Belum dijawab
+                    </span>
+                </div>
+
+                <!-- Question Image (if any) -->
+                {% if question.image %}
+                <div class="mb-4">
+                    <img src="{{ url_for('static', filename='images/' + question.image) }}" alt="Question image" class="max-w-md mx-auto rounded-lg">
+                </div>
+                {% endif %}
+
+                <!-- Options -->
+                <div class="space-y-3">
+                    {% for option in question.options %}
+                    <label class="flex items-center p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors option-label">
+                        <input type="radio" name="question_{{ question.id }}" value="{{ option.key }}" class="sr-only">
+                        <div class="flex items-center space-x-3 w-full">
+                            <div class="option-marker w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                                <div class="w-2 h-2 rounded-full bg-primary hidden"></div>
+                            </div>
+                            <span class="font-medium text-gray-700">{{ option.key }}.</span>
+                            <span class="text-gray-800">{{ option.text }}</span>
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <!-- Explanation (hidden initially) -->
+                {% if question.explanation %}
+                <div class="explanation mt-4 p-4 bg-gray-50 rounded-lg hidden">
+                    <h4 class="font-semibold text-gray-900 mb-2">Penjelasan:</h4>
+                    <p class="text-gray-700">{{ question.explanation }}</p>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+            <button type="button" id="review-btn" class="btn btn-outline">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                Semak Jawapan
+            </button>
+            <button type="submit" id="submit-btn" class="btn btn-primary btn-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Serahkan Jawapan
+            </button>
+        </div>
+    </form>
+
+    <!-- Review Modal -->
+    <div id="review-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-900">Semak Jawapan Anda</h3>
+                    <button type="button" onclick="closeReviewModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div id="review-content" class="space-y-4">
+                    <!-- Review content will be populated here -->
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="closeReviewModal()" class="btn btn-outline">Kembali</button>
+                    <button type="button" onclick="submitFromReview()" class="btn btn-primary">Serahkan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let timeLimit = {{ time_limit }} * 60; // Convert to seconds
+let timer = setInterval(updateTimer, 1000);
+let answeredQuestions = new Set();
+let totalQuestions = {{ total_questions }};
+
+function updateTimer() {
+    timeLimit--;
+    const minutes = Math.floor(timeLimit / 60);
+    const seconds = timeLimit % 60;
+    document.getElementById('timer').textContent =
+        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    if (timeLimit <= 0) {
+        clearInterval(timer);
+        submitQuiz();
+    }
+}
+
+function updateProgress() {
+    const answeredCount = answeredQuestions.size;
+    const progressPercentage = (answeredCount / totalQuestions) * 100;
+
+    document.getElementById('progress-bar').style.width = progressPercentage + '%';
+    document.getElementById('answered-count').textContent = answeredCount;
+}
+
+function updateQuestionStatus(questionId, isAnswered) {
+    const questionCard = document.querySelector(`[data-question-id="${questionId}"]`);
+    const statusElement = questionCard.querySelector('.question-status');
+
+    if (isAnswered) {
+        answeredQuestions.add(questionId);
+        statusElement.textContent = 'Dijawab';
+        statusElement.className = 'question-status text-sm px-2 py-1 rounded-full bg-green-100 text-green-600';
+    } else {
+        answeredQuestions.delete(questionId);
+        statusElement.textContent = 'Belum dijawab';
+        statusElement.className = 'question-status text-sm px-2 py-1 rounded-full bg-gray-100 text-gray-600';
+    }
+
+    updateProgress();
+}
+
+// Handle option selection
+document.querySelectorAll('input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        const questionId = this.name.split('_')[1];
+        updateQuestionStatus(questionId, true);
+
+        // Update visual feedback
+        const options = this.closest('.space-y-3').querySelectorAll('label');
+        options.forEach(label => {
+            const marker = label.querySelector('.option-marker div');
+            if (label.querySelector('input').checked) {
+                label.classList.add('border-primary', 'bg-primary', 'bg-opacity-10');
+                marker.classList.remove('hidden');
+            } else {
+                label.classList.remove('border-primary', 'bg-primary', 'bg-opacity-10');
+                marker.classList.add('hidden');
+            }
+        });
+    });
+});
+
+function showReviewModal() {
+    const reviewContent = document.getElementById('review-content');
+    reviewContent.innerHTML = '';
+
+    let allAnswered = true;
+
+    document.querySelectorAll('.question-card').forEach((card, index) => {
+        const questionId = card.dataset.questionId;
+        const questionText = card.querySelector('h3').textContent;
+        const selectedOption = card.querySelector('input[type="radio"]:checked');
+
+        const reviewItem = document.createElement('div');
+        reviewItem.className = 'p-4 border rounded-lg';
+
+        if (selectedOption) {
+            reviewItem.className += ' bg-green-50 border-green-200';
+            reviewItem.innerHTML = `
+                <div class="font-medium text-green-900">Soalan ${index + 1}: ${selectedOption.value}</div>
+                <div class="text-sm text-gray-600 mt-1">${questionText}</div>
+            `;
+        } else {
+            allAnswered = false;
+            reviewItem.className += ' bg-red-50 border-red-200';
+            reviewItem.innerHTML = `
+                <div class="font-medium text-red-900">Soalan ${index + 1}: Belum dijawab</div>
+                <div class="text-sm text-gray-600 mt-1">${questionText}</div>
+            `;
+        }
+
+        reviewContent.appendChild(reviewItem);
+    });
+
+    if (!allAnswered) {
+        const warning = document.createElement('div');
+        warning.className = 'p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-4';
+        warning.innerHTML = `
+            <div class="flex items-center">
+                <svg class="w-5 h-5 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+                <span class="text-yellow-800 font-medium">Ada soalan yang belum dijawab!</span>
+            </div>
+        `;
+        reviewContent.insertBefore(warning, reviewContent.firstChild);
+    }
+
+    document.getElementById('review-modal').classList.remove('hidden');
+}
+
+function closeReviewModal() {
+    document.getElementById('review-modal').classList.add('hidden');
+}
+
+function submitFromReview() {
+    closeReviewModal();
+    submitQuiz();
+}
+
+function submitQuiz() {
+    clearInterval(timer);
+
+    const formData = new FormData(document.getElementById('quiz-form'));
+    const answers = {};
+
+    // Collect all answers
+    document.querySelectorAll('.question-card').forEach(card => {
+        const questionId = card.dataset.questionId;
+        const selectedOption = card.querySelector('input[type="radio"]:checked');
+        answers[questionId] = selectedOption ? selectedOption.value : null;
+    });
+
+    // Submit to server
+    fetch('/api/submit-mcq', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            subject: '{{ subject }}',
+            chapter: {{ chapter }},
+            answers: answers,
+            time_spent: {{ time_limit }} * 60 - timeLimit
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Redirect to results page
+            window.location.href = `/mcq-results/${data.attempt_id}`;
+        } else {
+            alert('Ralat semasa menyerahkan jawapan: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ralat semasa menyerahkan jawapan');
+    });
+}
+
+// Event listeners
+document.getElementById('review-btn').addEventListener('click', showReviewModal);
+document.getElementById('quiz-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    showReviewModal();
+});
+
+// Initialize
+updateProgress();
+</script>
+{% endblock %}

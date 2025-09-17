@@ -40,138 +40,184 @@
             </div>
         </div>
 
-        <!-- Topics Grid -->
+        <!-- Chapters Section -->
         <div class="mb-12">
-            <h2 class="text-3xl font-bold text-base-content mb-8 text-center">Topik Pembelajaran</h2>
+            <h2 class="text-3xl font-bold text-base-content mb-8 text-center">Bab Pembelajaran</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% if subject == 'bahasa-melayu' %}
-                <div class="card bg-base-200 shadow-xl">
+                <!-- Chapter 1 -->
+                <a href="{{ url_for('chapter', subject=subject, chapter=1) }}" class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
                     <div class="card-body">
-                        <h3 class="card-title">KOMSAS</h3>
-                        <p class="text-base-content/80">Komsponen Sastera dalam mata pelajaran Bahasa Melayu</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="card-title">Bab 1</h3>
+                            <span class="badge badge-primary">Pengenalan</span>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            {% if subject == 'sains' %}
+                            Pengenalan kepada Biologi dan konsep asas
+                            {% elif subject == 'matematik' %}
+                            Nombor dan operasi asas
+                            {% elif subject == 'bahasa-melayu' %}
+                            Bahasa dan komunikasi
+                            {% elif subject == 'english' %}
+                            Introduction to English Language
+                            {% else %}
+                            Pengenalan kepada {{ subject.replace('-', ' ') }}
+                            {% endif %}
+                        </p>
+                        <div class="card-actions justify-between items-center">
+                            <span class="text-sm text-base-content/60">45 minit</span>
+                            <div class="flex space-x-2">
+                                <span class="badge badge-sm">Notas</span>
+                                <span class="badge badge-sm">MCQ</span>
+                                <span class="badge badge-sm">Subjektif</span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="card bg-base-200 shadow-xl">
+                <!-- Chapter 2 -->
+                <a href="{{ url_for('chapter', subject=subject, chapter=2) }}" class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
                     <div class="card-body">
-                        <h3 class="card-title">Tatabahasa</h3>
-                        <p class="text-base-content/80">Asas tatabahasa Bahasa Melayu yang lengkap</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="card-title">Bab 2</h3>
+                            <span class="badge badge-secondary">Tahap Asas</span>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            {% if subject == 'sains' %}
+                            Sel dan struktur organisma
+                            {% elif subject == 'matematik' %}
+                            Algebra dan persamaan
+                            {% elif subject == 'bahasa-melayu' %}
+                            Tatabahasa dan ayat
+                            {% elif subject == 'english' %}
+                            Grammar and Sentence Structure
+                            {% else %}
+                            Konsep lanjutan {{ subject.replace('-', ' ') }}
+                            {% endif %}
+                        </p>
+                        <div class="card-actions justify-between items-center">
+                            <span class="text-sm text-base-content/60">60 minit</span>
+                            <div class="flex space-x-2">
+                                <span class="badge badge-sm">Notas</span>
+                                <span class="badge badge-sm">MCQ</span>
+                                <span class="badge badge-sm">Subjektif</span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="card bg-base-200 shadow-xl">
+                <!-- Chapter 3 -->
+                <a href="{{ url_for('chapter', subject=subject, chapter=3) }}" class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
                     <div class="card-body">
-                        <h3 class="card-title">Penulisan</h3>
-                        <p class="text-base-content/80">Teknik penulisan karangan dan rumusan</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="card-title">Bab 3</h3>
+                            <span class="badge badge-secondary">Tahap Asas</span>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            {% if subject == 'sains' %}
+                            Sistem dalam badan manusia
+                            {% elif subject == 'matematik' %}
+                            Geometri dan ukuran
+                            {% elif subject == 'bahasa-melayu' %}
+                            KOMSAS dan sastera
+                            {% elif subject == 'english' %}
+                            Reading Comprehension
+                            {% else %}
+                            Aplikasi {{ subject.replace('-', ' ') }}
+                            {% endif %}
+                        </p>
+                        <div class="card-actions justify-between items-center">
+                            <span class="text-sm text-base-content/60">50 minit</span>
+                            <div class="flex space-x-2">
+                                <span class="badge badge-sm">Notas</span>
+                                <span class="badge badge-sm">MCQ</span>
+                                <span class="badge badge-sm">Subjektif</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                {% endif %}
+                </a>
 
-                {% if subject == 'matematik' %}
-                <div class="card bg-base-200 shadow-xl">
+                <!-- Chapter 4 -->
+                <a href="{{ url_for('chapter', subject=subject, chapter=4) }}" class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
                     <div class="card-body">
-                        <h3 class="card-title">Algebra</h3>
-                        <p class="text-base-content/80">Persamaan linear, kuadratik, dan fungsi</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="card-title">Bab 4</h3>
+                            <span class="badge badge-accent">Tahap Pertengahan</span>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            {% if subject == 'sains' %}
+                            Kimia asas dan jirim
+                            {% elif subject == 'matematik' %}
+                            Statistik dan kebarangkalian
+                            {% elif subject == 'bahasa-melayu' %}
+                            Penulisan karangan
+                            {% elif subject == 'english' %}
+                            Writing and Composition
+                            {% else %}
+                            Topik maju {{ subject.replace('-', ' ') }}
+                            {% endif %}
+                        </p>
+                        <div class="card-actions justify-between items-center">
+                            <span class="text-sm text-base-content/60">55 minit</span>
+                            <div class="flex space-x-2">
+                                <span class="badge badge-sm">Notas</span>
+                                <span class="badge badge-sm">MCQ</span>
+                                <span class="badge badge-sm">Subjektif</span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="card bg-base-200 shadow-xl">
+                <!-- Chapter 5 -->
+                <a href="{{ url_for('chapter', subject=subject, chapter=5) }}" class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
                     <div class="card-body">
-                        <h3 class="card-title">Geometri</h3>
-                        <p class="text-base-content/80">Bentuk geometri dan pengukuran</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="card-title">Bab 5</h3>
+                            <span class="badge badge-accent">Tahap Pertengahan</span>
+                        </div>
+                        <p class="text-base-content/80 mb-4">
+                            {% if subject == 'sains' %}
+                            Fizik dan tenaga
+                            {% elif subject == 'matematik' %}
+                            Fungsi dan graf
+                            {% elif subject == 'bahasa-melayu' %}
+                            Ujian dan peperiksaan
+                            {% elif subject == 'english' %}
+                            Literature Analysis
+                            {% else %}
+                            Aplikasi lanjutan {{ subject.replace('-', ' ') }}
+                            {% endif %}
+                        </p>
+                        <div class="card-actions justify-between items-center">
+                            <span class="text-sm text-base-content/60">65 minit</span>
+                            <div class="flex space-x-2">
+                                <span class="badge badge-sm">Notas</span>
+                                <span class="badge badge-sm">MCQ</span>
+                                <span class="badge badge-sm">Subjektif</span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
+                <!-- Revision Chapter -->
                 <div class="card bg-base-200 shadow-xl">
                     <div class="card-body">
-                        <h3 class="card-title">Statistik</h3>
-                        <p class="text-base-content/80">Pengumpulan dan analisis data</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="card-title">Bab 6</h3>
+                            <span class="badge badge-error">Ulangkaji</span>
+                        </div>
+                        <p class="text-base-content/80 mb-4">Ulangkaji menyeluruh dan latihan percubaan</p>
+                        <div class="card-actions justify-between items-center">
+                            <span class="text-sm text-base-content/60">90 minit</span>
+                            <div class="flex space-x-2">
+                                <span class="badge badge-sm">Notas</span>
+                                <span class="badge badge-sm">MCQ</span>
+                                <span class="badge badge-sm">Subjektif</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                {% endif %}
-
-                {% if subject == 'sains' %}
-                <div class="card bg-base-200 shadow-xl">
-                    <div class="card-body">
-                        <h3 class="card-title">Biologi</h3>
-                        <p class="text-base-content/80">Struktur dan fungsi organisma hidup</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card bg-base-200 shadow-xl">
-                    <div class="card-body">
-                        <h3 class="card-title">Kimia</h3>
-                        <p class="text-base-content/80">Jirim dan perubahan kimia</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card bg-base-200 shadow-xl">
-                    <div class="card-body">
-                        <h3 class="card-title">Fizik</h3>
-                        <p class="text-base-content/80">Tenaga, daya, dan gerakan</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if subject == 'english' %}
-                <div class="card bg-base-200 shadow-xl">
-                    <div class="card-body">
-                        <h3 class="card-title">Grammar</h3>
-                        <p class="text-base-content/80">English grammar and sentence structure</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-sm">Start Learning</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card bg-base-200 shadow-xl">
-                    <div class="card-body">
-                        <h3 class="card-title">Literature</h3>
-                        <p class="text-base-content/80">English literature and comprehension</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-sm">Start Learning</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card bg-base-200 shadow-xl">
-                    <div class="card-body">
-                        <h3 class="card-title">Writing</h3>
-                        <p class="text-base-content/80">Essay writing and composition</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary btn-sm">Start Learning</button>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
             </div>
         </div>
 

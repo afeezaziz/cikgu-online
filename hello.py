@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, jsonify
+from flask_login import login_required, current_user, login_user, logout_user
 from dotenv import load_dotenv
 import os
 from auth import google_auth, login_manager, create_or_update_user
@@ -158,6 +159,199 @@ def subject_detail(subject):
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+# Chapter and assessment routes
+@app.route('/subjects/<subject>/chapter/<int:chapter>')
+@login_required
+def chapter(subject, chapter):
+    # Sample chapter data - in a real app, this would come from a database
+    chapter_data = {
+        1: {
+            'title': 'Pengenalan kepada Biologi',
+            'description': 'Asas-asas biologi dan konsep penting dalam sains hidup',
+            'estimated_time': 45,
+            'sections': [
+                {
+                    'title': 'Definisi Biologi',
+                    'content': '<p>Biologi adalah kajian tentang hidupan dan organisma hidup. Ia merangkumi pelbagai aspek kehidupan dari peringkat molekul hingga ekosistem.</p>',
+                    'key_points': [
+                        'Biologi berasal dari perkataan Greek "bios" (hidup) dan "logos" (kajian)',
+                        'Merupakan sains yang mengkaji organisma hidup',
+                        'Meliputi pelbagai bidang seperti botani, zoologi, dan genetik'
+                    ],
+                    'examples': [
+                        {'question': 'Apakah definisi biologi?', 'answer': 'Kajian tentang hidupan dan organisma hidup'}
+                    ]
+                },
+                {
+                    'title': 'Ciri-ciri Hidupan',
+                    'content': '<p>Semua organisma hidup mempunyai ciri-ciri tertentu yang membezakannya daripada benda bukan hidup.</p>',
+                    'key_points': [
+                        'Organisma hidup memerlukan makanan dan tenaga',
+                        'Berupaya membesar dan berkembang',
+                        'Boleh membiak dan bertindak balas terhadap rangsangan'
+                    ],
+                    'examples': [
+                        {'question': 'Berikan 3 ciri hidupan', 'answer': 'Memerlukan makanan, boleh membiak, dan boleh bergerak'}
+                    ]
+                }
+            ]
+        }
+    }
+
+    data = chapter_data.get(chapter, chapter_data[1])
+
+    return render_template('chapter.html',
+                         subject=subject,
+                         chapter_number=chapter,
+                         chapter_title=data['title'],
+                         chapter_description=data['description'],
+                         estimated_time=data['estimated_time'],
+                         sections=data['sections'],
+                         progress_percentage=65,
+                         completed_subtopics=1,
+                         total_subtopics=2,
+                         previous_chapter=chapter-1 if chapter > 1 else None,
+                         next_chapter=chapter+1 if chapter < 5 else None)
+
+@app.route('/subjects/<subject>/chapter/<int:chapter>/mcq')
+@login_required
+def mcq_assessment(subject, chapter):
+    # Sample MCQ questions - in a real app, this would come from a database
+    questions = [
+        {
+            'id': 1,
+            'question': 'Apakah definisi biologi?',
+            'options': [
+                {'key': 'A', 'text': 'Kajian tentang batu dan mineral'},
+                {'key': 'B', 'text': 'Kajian tentang hidupan dan organisma hidup'},
+                {'key': 'C', 'text': 'Kajian tentang nombor dan persamaan'},
+                {'key': 'D', 'text': 'Kajian tentang sejarah tamadun'}
+            ],
+            'explanation': 'Biologi berasal dari perkataan Greek "bios" (hidup) dan "logos" (kajian), yang membawa maksud kajian tentang hidupan dan organisma hidup.'
+        },
+        {
+            'id': 2,
+            'question': 'Manakah antara berikut BUKAN ciri hidupan?',
+            'options': [
+                {'key': 'A', 'text': 'Memerlukan makanan'},
+                {'key': 'B', 'text': 'Boleh membiak'},
+                {'key': 'C', 'text': 'Mempunyai nukleus'},
+                {'key': 'D', 'text': 'Boleh bergerak'}
+            ],
+            'explanation': 'Mempunyai nukleus bukanlah ciri semua hidupan (contohnya, bakteria tidak mempunyai nukleus yang sebenar).'
+        },
+        {
+            'id': 3,
+            'question': 'Apakah perbezaan antara sel prokariotik dan eukariotik?',
+            'options': [
+                {'key': 'A', 'text': 'Saiz sel sahaja'},
+                {'key': 'B', 'text': 'Kehadiran nukleus'},
+                {'key': 'C', 'text': 'Jenis makanan'},
+                {'key': 'D', 'text': 'Tempat tinggal'}
+            ],
+            'explanation': 'Perbezaan utama ialah sel eukariotik mempunyai nukleus yang sebenar manakala sel prokariotik tidak.'
+        }
+    ]
+
+    return render_template('mcq_assessment.html',
+                         subject=subject,
+                         chapter=chapter,
+                         questions=questions,
+                         total_questions=len(questions),
+                         time_limit=30)
+
+@app.route('/subjects/<subject>/chapter/<int:chapter>/subjective')
+@login_required
+def subjective_assessment(subject, chapter):
+    # Sample subjective questions - in a real app, this would come from a database
+    essay_question = {
+        'title': 'Kepentingan Biologi dalam Kehidupan Harian',
+        'prompt': 'Huraikan bagaimana pengetahuan biologi dapat membantu kita dalam kehidupan harian. Berikan contoh-contoh yang relevan.',
+        'marks': 30,
+        'guidelines': [
+            'Pastikan karangan anda mempunyai pengenalan, isi, dan kesimpulan',
+            'Berikan sekurang-kurangnya 3 contoh aplikasi biologi dalam kehidupan harian',
+            'Gunakan bahasa yang formal dan jelas',
+            'Panjang karangan: 250-300 patah perkataan'
+        ]
+    }
+
+    subjective_questions = [
+        {
+            'id': 1,
+            'question': 'Terangkan mengapa air penting untuk organisma hidup.',
+            'type': 'paragraph',
+            'marks': 10,
+            'min_words': 50,
+            'max_words': 100,
+            'tips': [
+                'Fokus kepada fungsi air dalam badan',
+                'Sebutkan proses-proses yang memerlukan air',
+                'Berikan contoh kesan kekurangan air'
+            ]
+        },
+        {
+            'id': 2,
+            'question': 'Apakah yang dimaksudkan dengan metabolisme? Berikan dua jenis metabolisme.',
+            'type': 'short',
+            'marks': 5
+        },
+        {
+            'id': 3,
+            'question': 'Bandingkan antara respirasi aerobik dan respirasi anaerobik.',
+            'type': 'essay',
+            'marks': 15,
+            'min_words': 80,
+            'max_words': 150,
+            'context': 'Respirasi adalah proses penting dalam pengeluaran tenaga untuk organisma hidup.',
+            'tips': [
+                'Terangkan kedua-dua jenis respirasi',
+                'Bandingkan dari segi penggunaan oksigen',
+                'Nyatakan hasil setiap jenis respirasi',
+                'Berikan contoh organisma yang menjalani setiap jenis'
+            ]
+        }
+    ]
+
+    return render_template('subjective_assessment.html',
+                         subject=subject,
+                         chapter=chapter,
+                         essay_question=essay_question,
+                         subjective_questions=subjective_questions,
+                         total_questions=len(subjective_questions) + (1 if essay_question else 0),
+                         time_limit=60)
+
+# API routes for handling assessments
+@app.route('/api/progress', methods=['POST'])
+@login_required
+def update_progress():
+    data = request.json
+    # In a real app, save progress to database
+    return jsonify({'success': True, 'message': 'Progress saved'})
+
+@app.route('/api/submit-mcq', methods=['POST'])
+@login_required
+def submit_mcq():
+    data = request.json
+    # In a real app, save MCQ results to database
+    attempt_id = str(uuid.uuid4())
+    return jsonify({'success': True, 'attempt_id': attempt_id})
+
+@app.route('/api/submit-subjective', methods=['POST'])
+@login_required
+def submit_subjective():
+    data = request.json
+    # In a real app, save subjective answers to database
+    attempt_id = str(uuid.uuid4())
+    return jsonify({'success': True, 'attempt_id': attempt_id})
+
+@app.route('/api/save-subjective-draft', methods=['POST'])
+@login_required
+def save_subjective_draft():
+    data = request.json
+    # In a real app, save draft to database
+    return jsonify({'success': True})
 
 if __name__ == '__main__':
     debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
