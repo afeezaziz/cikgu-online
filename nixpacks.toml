@@ -21,5 +21,5 @@ cmd = "cd /app && gunicorn --bind 0.0.0.0:$PORT --workers 4 --timeout 120 hello:
 [variables]
 PORT = "8000"
 PYTHONUNBUFFERED = "1"
-# Google OAuth redirect URI - update this to your deployed application URL
-GOOGLE_REDIRECT_URI = "https://your-app-url/callback"
+# Google OAuth redirect URI for https://cikguonline.angpao.my
+GOOGLE_REDIRECT_URI = "https://cikguonline.angpao.my/callback"
