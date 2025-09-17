@@ -11,7 +11,8 @@ class GoogleAuth:
     def __init__(self):
         self.client_id = os.environ.get('GOOGLE_CLIENT_ID')
         self.client_secret = os.environ.get('GOOGLE_CLIENT_SECRET')
-        self.redirect_uri = 'http://localhost:5000/callback'
+        # Use environment variable for redirect URI, fallback to localhost for development
+        self.redirect_uri = os.environ.get('GOOGLE_REDIRECT_URI', 'http://localhost:5000/callback')
         self.auth_url = 'https://accounts.google.com/o/oauth2/v2/auth'
         self.token_url = 'https://oauth2.googleapis.com/token'
         self.user_info_url = 'https://www.googleapis.com/oauth2/v2/userinfo'
