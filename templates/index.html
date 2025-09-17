@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Laman Utama - SPM Online Learning{% endblock %}
+
+{% block content %}
+<section class="hero min-h-screen bg-gradient-to-r from-primary to-secondary text-primary-content">
+    <div class="hero-overlay bg-opacity-60"></div>
+    <div class="hero-content text-center text-neutral-content">
+        <div class="max-w-3xl">
+            <h1 class="mb-5 text-5xl font-bold">Selamat Datang ke Cikgu</h1>
+            <p class="mb-5 text-xl">Platform pembelajaran online yang komprehensif untuk persediaan peperiksaan SPM anda.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ url_for('subjects') }}" class="btn btn-lg btn-accent">Mula Belajar</a>
+                <a href="{{ url_for('about') }}" class="btn btn-lg btn-outline">Ketahui Lebih Lanjut</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-16 bg-base-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-base-content mb-4">Mengapa Pilih Cikgu?</h2>
+            <p class="text-xl text-base-content/80">Kami menyediakan pembelajaran yang berkualiti untuk kejayaan SPM anda</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="card bg-base-200 shadow-xl">
+                <div class="card-body items-center text-center">
+                    <div class="text-4xl mb-4">📚</div>
+                    <h3 class="card-title text-xl mb-2">Kandungan Komprehensif</h3>
+                    <p class="text-base-content/80">Bahan pembelajaran yang merangkumi semua mata pelajaran SPM penting</p>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow-xl">
+                <div class="card-body items-center text-center">
+                    <div class="text-4xl mb-4">🎯</div>
+                    <h3 class="card-title text-xl mb-2">Fokus SPM</h3>
+                    <p class="text-base-content/80">Kandungan disesuaikan khusus untuk format peperiksaan SPM terkini</p>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow-xl">
+                <div class="card-body items-center text-center">
+                    <div class="text-4xl mb-4">📱</div>
+                    <h3 class="card-title text-xl mb-2">Mobile Friendly</h3>
+                    <p class="text-base-content/80">Belajar di mana sahaja dengan platform yang mesra pengguna</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-16 bg-primary text-primary-content">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold mb-4">Mata Pelajaran Popular</h2>
+            <p class="text-xl text-primary-content/80">Pilih mata pelajaran untuk mula belajar</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <a href="{{ url_for('subject_detail', subject='bahasa-melayu') }}" class="card bg-primary-content text-primary hover:shadow-xl transition-shadow">
+                <div class="card-body items-center text-center p-4">
+                    <div class="text-2xl mb-2">🇲🇾</div>
+                    <h3 class="font-semibold">Bahasa Melayu</h3>
+                </div>
+            </a>
+
+            <a href="{{ url_for('subject_detail', subject='matematik') }}" class="card bg-primary-content text-primary hover:shadow-xl transition-shadow">
+                <div class="card-body items-center text-center p-4">
+                    <div class="text-2xl mb-2">🔢</div>
+                    <h3 class="font-semibold">Matematik</h3>
+                </div>
+            </a>
+
+            <a href="{{ url_for('subject_detail', subject='sains') }}" class="card bg-primary-content text-primary hover:shadow-xl transition-shadow">
+                <div class="card-body items-center text-center p-4">
+                    <div class="text-2xl mb-2">🔬</div>
+                    <h3 class="font-semibold">Sains</h3>
+                </div>
+            </a>
+
+            <a href="{{ url_for('subject_detail', subject='english') }}" class="card bg-primary-content text-primary hover:shadow-xl transition-shadow">
+                <div class="card-body items-center text-center p-4">
+                    <div class="text-2xl mb-2">🌍</div>
+                    <h3 class="font-semibold">English</h3>
+                </div>
+            </a>
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="{{ url_for('subjects') }}" class="btn btn-lg btn-outline btn-accent">Lihat Semua Mata Pelajaran</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

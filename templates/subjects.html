@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Mata Pelajaran - SPM Online Learning{% endblock %}
+
+{% block content %}
+<section class="py-16 bg-base-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-base-content mb-4">Semua Mata Pelajaran SPM</h1>
+            <p class="text-xl text-base-content/80">Pilih mata pelajaran untuk mula pembelajaran anda</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Core Subjects -->
+            <div class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <span class="mr-2">🇲🇾</span>
+                        Bahasa Melayu
+                    </h2>
+                    <p class="text-base-content/80 mb-4">Asas penting dalam komunikasi dan penulisan Bahasa Melayu</p>
+                    <div class="card-actions justify-end">
+                        <a href="{{ url_for('subject_detail', subject='bahasa-melayu') }}" class="btn btn-primary">Mula Belajar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <span class="mr-2">🌍</span>
+                        Bahasa Inggeris
+                    </h2>
+                    <p class="text-base-content/80 mb-4">Menguasai bahasa Inggeris untuk komunikasi global</p>
+                    <div class="card-actions justify-end">
+                        <a href="{{ url_for('subject_detail', subject='english') }}" class="btn btn-primary">Mula Belajar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <span class="mr-2">🔢</span>
+                        Matematik
+                    </h2>
+                    <p class="text-base-content/80 mb-4">Konsep asas matematik dan penyelesaian masalah</p>
+                    <div class="card-actions justify-end">
+                        <a href="{{ url_for('subject_detail', subject='matematik') }}" class="btn btn-primary">Mula Belajar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <span class="mr-2">🔬</span>
+                        Sains
+                    </h2>
+                    <p class="text-base-content/80 mb-4">Konsep sains asas dan eksperimen praktikal</p>
+                    <div class="card-actions justify-end">
+                        <a href="{{ url_for('subject_detail', subject='sains') }}" class="btn btn-primary">Mula Belajar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <span class="mr-2">🕌</span>
+                        Pendidikan Islam
+                    </h2>
+                    <p class="text-base-content/80 mb-4">Pembelajaran agama Islam dan nilai-nilai murni</p>
+                    <div class="card-actions justify-end">
+                        <a href="{{ url_for('subject_detail', subject='pendidikan-islam') }}" class="btn btn-primary">Mula Belajar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <span class="mr-2">📜</span>
+                        Sejarah
+                    </h2>
+                    <p class="text-base-content/80 mb-4">Sejarah Malaysia dan dunia yang penting</p>
+                    <div class="card-actions justify-end">
+                        <a href="{{ url_for('subject_detail', subject='sejarah') }}" class="btn btn-primary">Mula Belajar</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Elective Subjects -->
+            <div class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <span class="mr-2">🧮</span>
+                        Matematik Tambahan
+                    </h2>
+                    <p class="text-base-content/80 mb-4">Konsep matematik lanjutan untuk persediaan tinggi</p>
+                    <div class="card-actions justify-end">
+                        <a href="{{ url_for('subject_detail', subject='matematik-tambahan') }}" class="btn btn-primary">Mula Belajar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <span class="mr-2">🧪</span>
+                        Kimia
+                    </h2>
+                    <p class="text-base-content/80 mb-4">Sains bahan dan tindak balas kimia</p>
+                    <div class="card-actions justify-end">
+                        <a href="{{ url_for('subject_detail', subject='kimia') }}" class="btn btn-primary">Mula Belajar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <span class="mr-2">⚡</span>
+                        Fizik
+                    </h2>
+                    <p class="text-base-content/80 mb-4">Konsep fizik dan hukum alam semesta</p>
+                    <div class="card-actions justify-end">
+                        <a href="{{ url_for('subject_detail', subject='fizik') }}" class="btn btn-primary">Mula Belajar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-12">
+            <p class="text-lg text-base-content/80 mb-4">Lebih banyak mata pelajaran akan ditambah tidak lama lagi!</p>
+            <a href="{{ url_for('home') }}" class="btn btn-outline btn-primary">Kembali ke Laman Utama</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

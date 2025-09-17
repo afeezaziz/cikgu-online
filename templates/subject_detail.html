@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ subject.replace('-', ' ').title() }} - SPM Online Learning{% endblock %}
+
+{% block content %}
+<section class="py-16 bg-base-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8">
+            <nav class="text-sm">
+                <a href="{{ url_for('home') }}" class="text-primary hover:text-primary/80">Laman Utama</a>
+                <span class="mx-2">/</span>
+                <a href="{{ url_for('subjects') }}" class="text-primary hover:text-primary/80">Mata Pelajaran</a>
+                <span class="mx-2">/</span>
+                <span class="text-base-content/60">{{ subject.replace('-', ' ').title() }}</span>
+            </nav>
+        </div>
+
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-base-content mb-4">{{ subject.replace('-', ' ').title() }}</h1>
+            <p class="text-xl text-base-content/80">Bahan pembelajaran komprehensif untuk persediaan SPM anda</p>
+        </div>
+
+        <!-- Subject Overview -->
+        <div class="card bg-base-200 shadow-xl mb-12">
+            <div class="card-body">
+                <h2 class="card-title text-2xl mb-4">Ringkasan Mata Pelajaran</h2>
+                <p class="text-base-content/80">
+                    {% if subject == 'bahasa-melayu' %}
+                    Bahasa Melayu adalah mata pelajaran wajib dalam SPM yang menumpukan kepada kemahiran membaca, menulis, memahami, dan berkomunikasi dalam Bahasa Melayu.
+                    {% elif subject == 'matematik' %}
+                    Matematik SPM meliputi topik asas seperti algebra, geometri, statistik, dan penyelesaian masalah.
+                    {% elif subject == 'sains' %}
+                    Sains SPM memberikan asas dalam biologi, kimia, dan fizik serta kemahiran penyiasatan saintifik.
+                    {% elif subject == 'english' %}
+                    English SPM menguji kemahiran berbahasa Inggeris dalam reading, writing, listening, dan speaking.
+                    {% else %}
+                    Pelajari {{ subject.replace('-', ' ') }} dengan pendekatan yang berstruktur dan berkesan.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <!-- Topics Grid -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold text-base-content mb-8 text-center">Topik Pembelajaran</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% if subject == 'bahasa-melayu' %}
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">KOMSAS</h3>
+                        <p class="text-base-content/80">Komsponen Sastera dalam mata pelajaran Bahasa Melayu</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Tatabahasa</h3>
+                        <p class="text-base-content/80">Asas tatabahasa Bahasa Melayu yang lengkap</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Penulisan</h3>
+                        <p class="text-base-content/80">Teknik penulisan karangan dan rumusan</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if subject == 'matematik' %}
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Algebra</h3>
+                        <p class="text-base-content/80">Persamaan linear, kuadratik, dan fungsi</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Geometri</h3>
+                        <p class="text-base-content/80">Bentuk geometri dan pengukuran</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Statistik</h3>
+                        <p class="text-base-content/80">Pengumpulan dan analisis data</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if subject == 'sains' %}
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Biologi</h3>
+                        <p class="text-base-content/80">Struktur dan fungsi organisma hidup</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Kimia</h3>
+                        <p class="text-base-content/80">Jirim dan perubahan kimia</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Fizik</h3>
+                        <p class="text-base-content/80">Tenaga, daya, dan gerakan</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn btn-primary btn-sm">Mula Belajar</button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if subject == 'english' %}
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Grammar</h3>
+                        <p class="text-base-content/80">English grammar and sentence structure</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn btn-primary btn-sm">Start Learning</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Literature</h3>
+                        <p class="text-base-content/80">English literature and comprehension</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn btn-primary btn-sm">Start Learning</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Writing</h3>
+                        <p class="text-base-content/80">Essay writing and composition</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn btn-primary btn-sm">Start Learning</button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Study Resources -->
+        <div class="card bg-primary text-primary-content shadow-xl">
+            <div class="card-body">
+                <h2 class="card-title text-2xl mb-4">Sumber Pembelajaran</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">📝</div>
+                        <h3 class="font-semibold mb-2">Notas</h3>
+                        <p class="text-primary-content/80 text-sm">Nota lengkap untuk semua topik</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">📚</div>
+                        <h3 class="font-semibold mb-2">Latihan</h3>
+                        <p class="text-primary-content/80 text-sm">Soalan latihan untuk praktis</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🎥</div>
+                        <h3 class="font-semibold mb-2">Video</h3>
+                        <p class="text-primary-content/80 text-sm">Video pembelajaran interaktif</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">📊</div>
+                        <h3 class="font-semibold mb-2">Quiz</h3>
+                        <p class="text-primary-content/80 text-sm">Ujian untuk mengukur kefahaman</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-12">
+            <a href="{{ url_for('subjects') }}" class="btn btn-outline btn-primary mr-4">Kembali ke Mata Pelajaran</a>
+            <a href="{{ url_for('home') }}" class="btn btn-primary">Laman Utama</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
