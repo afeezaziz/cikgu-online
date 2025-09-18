@@ -3,7 +3,8 @@ from flask_login import login_required, current_user, login_user, logout_user
 from dotenv import load_dotenv
 import os
 from auth import google_auth, login_manager, create_or_update_user
-from models import db, User, Progress, Upload, StudySession
+from models import db, User, Progress, Upload, StudySession, PushSubscription
+from notification_service import notification_service
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import uuid
@@ -12,7 +13,16 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///cikgu.db')
+# Database configuration - MariaDB
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'mysql+pymysql://mariadb:JX2w2ItkFnIurlEWNRHXo8E4ibAo8lCyh464u0ZWaYCzQuC8opX2sZcY7Fu9HiCJ@104.248.150.75:33002/default')
+
+# MariaDB specific settings
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'pool_pre_ping': True,
+    'pool_recycle': 3600,
+    'pool_size': 10,
+    'max_overflow': 20
+}
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
@@ -21,9 +31,8 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 db.init_app(app)
 login_manager.init_app(app)
 
-# Create database tables
-with app.app_context():
-    db.create_all()
+# Database tables are managed by Alembic migrations
+# Run: uv run alembic upgrade head
 
 # Ensure upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -352,6 +361,66 @@ def save_subjective_draft():
     data = request.json
     # In a real app, save draft to database
     return jsonify({'success': True})
+
+# Push notification endpoints
+@app.route('/api/push/vapid-public-key', methods=['GET'])
+def get_vapid_public_key():
+    """Get VAPID public key for push notifications"""
+    public_key = os.environ.get('VAPID_PUBLIC_KEY')
+    if not public_key:
+        return jsonify({'error': 'VAPID public key not configured'}), 500
+    return jsonify({'public_key': public_key})
+
+@app.route('/api/push/subscribe', methods=['POST'])
+@login_required
+def push_subscribe():
+    """Subscribe to push notifications"""
+    try:
+        subscription_data = request.json
+        success = notification_service.register_subscription(
+            current_user.id,
+            subscription_data
+        )
+        if success:
+            return jsonify({'success': True})
+        return jsonify({'error': 'Failed to subscribe'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/push/unsubscribe', methods=['POST'])
+@login_required
+def push_unsubscribe():
+    """Unsubscribe from push notifications"""
+    try:
+        endpoint = request.json.get('endpoint')
+        if not endpoint:
+            return jsonify({'error': 'Endpoint required'}), 400
+
+        success = notification_service.unregister_subscription(
+            current_user.id,
+            endpoint
+        )
+        if success:
+            return jsonify({'success': True})
+        return jsonify({'error': 'Failed to unsubscribe'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/push/test', methods=['POST'])
+@login_required
+def test_push_notification():
+    """Send test push notification"""
+    try:
+        success = notification_service.send_notification_to_user(
+            current_user.id,
+            "Test Notification",
+            "This is a test notification from Cikgu!"
+        )
+        if success:
+            return jsonify({'success': True})
+        return jsonify({'error': 'Failed to send notification'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'

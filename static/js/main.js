@@ -190,9 +190,316 @@ function formatDate(date) {
     });
 }
 
+// Push notification functionality
+class PushNotificationManager {
+    constructor() {
+        this.subscription = null;
+        this.isSupported = 'serviceWorker' in navigator && 'PushManager' in window;
+        this.publicKey = null;
+    }
+
+    async initialize() {
+        if (!this.isSupported) {
+            console.log('Push notifications not supported');
+            return false;
+        }
+
+        try {
+            // Get VAPID public key from server
+            const response = await fetch('/api/push/vapid-public-key');
+            const data = await response.json();
+
+            if (!data.public_key) {
+                throw new Error('Failed to get VAPID public key');
+            }
+
+            this.publicKey = data.public_key;
+
+            // Register service worker
+            await this.registerServiceWorker();
+
+            // Check existing subscription
+            await this.checkExistingSubscription();
+
+            return true;
+        } catch (error) {
+            console.error('Failed to initialize push notifications:', error);
+            return false;
+        }
+    }
+
+    async registerServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            try {
+                const registration = await navigator.serviceWorker.register('/static/js/service-worker.js');
+                console.log('Service Worker registered successfully');
+                return registration;
+            } catch (error) {
+                console.error('Service Worker registration failed:', error);
+                return null;
+            }
+        }
+        return null;
+    }
+
+    async checkExistingSubscription() {
+        if ('serviceWorker' in navigator) {
+            const registration = await navigator.serviceWorker.ready;
+            this.subscription = await registration.pushManager.getSubscription();
+            return this.subscription;
+        }
+        return null;
+    }
+
+    async subscribe() {
+        if (!this.publicKey) {
+            throw new Error('VAPID public key not available');
+        }
+
+        try {
+            const registration = await navigator.serviceWorker.ready;
+
+            // Convert VAPID key to Uint8Array
+            const applicationServerKey = this.urlBase64ToUint8Array(this.publicKey);
+
+            this.subscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: applicationServerKey
+            });
+
+            // Send subscription to server
+            const response = await fetch('/api/push/subscribe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(this.subscription.toJSON())
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to register subscription with server');
+            }
+
+            console.log('Push notification subscription successful');
+            return true;
+        } catch (error) {
+            console.error('Failed to subscribe to push notifications:', error);
+            return false;
+        }
+    }
+
+    async unsubscribe() {
+        if (!this.subscription) {
+            return true;
+        }
+
+        try {
+            // Unsubscribe from service
+            await this.subscription.unsubscribe();
+
+            // Notify server
+            const response = await fetch('/api/push/unsubscribe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    endpoint: this.subscription.endpoint
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to unregister subscription from server');
+            }
+
+            this.subscription = null;
+            console.log('Unsubscribed from push notifications');
+            return true;
+        } catch (error) {
+            console.error('Failed to unsubscribe from push notifications:', error);
+            return false;
+        }
+    }
+
+    urlBase64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding)
+            .replace(/-/g, '+')
+            .replace(/_/g, '/');
+
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+
+        for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+        }
+
+        return outputArray;
+    }
+
+    async testNotification() {
+        try {
+            const response = await fetch('/api/push/test', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                window.cikgu.showNotification('Test notification sent!', 'success');
+            } else {
+                window.cikgu.showNotification('Failed to send test notification', 'error');
+            }
+        } catch (error) {
+            console.error('Failed to send test notification:', error);
+            window.cikgu.showNotification('Failed to send test notification', 'error');
+        }
+    }
+}
+
+// Service Worker for push notifications
+const serviceWorkerCode = `
+self.addEventListener('push', function(event) {
+    if (event.data) {
+        const data = event.data.json();
+
+        const options = {
+            body: data.body || 'New notification',
+            icon: '/static/img/icon-192x192.png',
+            badge: '/static/img/badge-72x72.png',
+            vibrate: [100, 50, 100],
+            data: data.data || {}
+        };
+
+        event.waitUntil(
+            self.registration.showNotification(data.title || 'Notification', options)
+        );
+    }
+});
+
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close();
+
+    if (event.notification.data && event.notification.data.url) {
+        event.waitUntil(
+            clients.openWindow(event.notification.data.url)
+        );
+    }
+});
+
+self.addEventListener('notificationclose', function(event) {
+    console.log('Notification was closed', event);
+});
+
+// Handle background sync for offline functionality
+self.addEventListener('sync', function(event) {
+    if (event.tag === 'background-sync') {
+        event.waitUntil(doBackgroundSync());
+    }
+});
+
+async function doBackgroundSync() {
+    try {
+        // Sync data with server when online
+        const cache = await caches.open('cikgu-cache');
+        const pendingRequests = await cache.match('/pending-requests');
+
+        if (pendingRequests) {
+            const requests = await pendingRequests.json();
+            for (const request of requests) {
+                try {
+                    await fetch(request.url, request.options);
+                } catch (error) {
+                    console.error('Failed to sync request:', error);
+                }
+            }
+
+            await cache.delete('/pending-requests');
+        }
+    } catch (error) {
+        console.error('Background sync failed:', error);
+    }
+}
+`;
+
+// Create and register service worker
+function createServiceWorker() {
+    const blob = new Blob([serviceWorkerCode], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(blob);
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register(swUrl)
+            .then(registration => {
+                console.log('Service Worker registered with scope:', registration.scope);
+                URL.revokeObjectURL(swUrl);
+            })
+            .catch(error => {
+                console.error('Service Worker registration failed:', error);
+                URL.revokeObjectURL(swUrl);
+            });
+    }
+}
+
+// Initialize push notifications when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize existing functionality
+    initializeMobileMenu();
+    initializeSmoothScrolling();
+    initializeCardEffects();
+    initializeSearch();
+    initializeLoadingStates();
+
+    // Initialize push notifications
+    const pushManager = new PushNotificationManager();
+    pushManager.initialize().then(success => {
+        if (success) {
+            // Add push notification toggle to UI
+            addPushNotificationUI(pushManager);
+        }
+    });
+
+    // Create service worker
+    createServiceWorker();
+});
+
+function addPushNotificationUI(pushManager) {
+    // Create push notification toggle button
+    const pushToggle = document.createElement('button');
+    pushToggle.className = 'btn btn-sm btn-outline-primary';
+    pushToggle.innerHTML = '🔔 Enable Notifications';
+    pushToggle.style.position = 'fixed';
+    pushToggle.style.bottom = '20px';
+    pushToggle.style.right = '20px';
+    pushToggle.style.zIndex = '1000';
+
+    let isSubscribed = false;
+
+    pushToggle.addEventListener('click', async function() {
+        if (!isSubscribed) {
+            const success = await pushManager.subscribe();
+            if (success) {
+                pushToggle.innerHTML = '🔕 Disable Notifications';
+                isSubscribed = true;
+                window.cikgu.showNotification('Notifications enabled!', 'success');
+            }
+        } else {
+            const success = await pushManager.unsubscribe();
+            if (success) {
+                pushToggle.innerHTML = '🔔 Enable Notifications';
+                isSubscribed = false;
+                window.cikgu.showNotification('Notifications disabled', 'info');
+            }
+        }
+    });
+
+    document.body.appendChild(pushToggle);
+}
+
 // Export functions for use in other scripts
 window.cikgu = {
     showNotification,
     formatDate,
-    updateProgress
+    updateProgress,
+    pushManager: new PushNotificationManager()
 };
