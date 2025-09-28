@@ -19,7 +19,17 @@ def create_app(config=None):
 
     # Basic configuration
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'mysql+pymysql://mariadb:JX2w2ItkFnIurlEWNRHXo8E4ibAo8lCyh464u0ZWaYCzQuC8opX2sZcY7Fu9HiCJ@104.248.150.75:33002/default')
+
+    # Handle different database URL formats
+    database_url = os.environ.get('DATABASE_URL', 'mysql+pymysql://mariadb:JX2w2ItkFnIurlEWNRHXo8E4ibAo8lCyh464u0ZWaYCzQuC8opX2sZcY7Fu9HiCJ@104.248.150.75:33002/default')
+
+    # Fix common URL format issues
+    if database_url.startswith('pymysql+mysql://'):
+        database_url = database_url.replace('pymysql+mysql://', 'mysql+pymysql://')
+    elif database_url.startswith('pymysql://'):
+        database_url = database_url.replace('pymysql://', 'mysql+pymysql://')
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
         'pool_pre_ping': True,
         'pool_recycle': 3600,
