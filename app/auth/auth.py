@@ -2,8 +2,8 @@ import os
 import requests
 from flask import redirect, url_for, session, request, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
-from app.models import db, User
-from app import login_manager
+from app.models import User
+from app.extensions import db, login_manager
 from datetime import datetime
 
 class GoogleAuth:

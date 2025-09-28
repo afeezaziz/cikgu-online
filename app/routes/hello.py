@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from flask_login import login_required, current_user, login_user, logout_user
 import os
 from app.auth.auth import google_auth, create_or_update_user
-from app.models import db, User, Progress, Upload, StudySession, PushSubscription
+from app.models import User, Progress, Upload, StudySession, PushSubscription
+from app.extensions import db
 # from app.services import notification_service  # Not implemented yet
 from werkzeug.utils import secure_filename
 from datetime import datetime
