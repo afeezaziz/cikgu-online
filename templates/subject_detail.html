@@ -7,9 +7,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8">
             <nav class="text-sm">
-                <a href="{{ url_for('home') }}" class="text-primary hover:text-primary/80">Laman Utama</a>
+                <a href="{{ url_for('main.home') }}" class="text-primary hover:text-primary/80">Laman Utama</a>
                 <span class="mx-2">/</span>
-                <a href="{{ url_for('subjects') }}" class="text-primary hover:text-primary/80">Mata Pelajaran</a>
+                <a href="{{ url_for('main.subjects') }}" class="text-primary hover:text-primary/80">Mata Pelajaran</a>
                 <span class="mx-2">/</span>
                 <span class="text-base-content/60">{{ subject.replace('-', ' ').title() }}</span>
             </nav>
@@ -251,8 +251,8 @@
         </div>
 
         <div class="text-center mt-12">
-            <a href="{{ url_for('subjects') }}" class="btn btn-outline btn-primary mr-4">Kembali ke Mata Pelajaran</a>
-            <a href="{{ url_for('home') }}" class="btn btn-primary">Laman Utama</a>
+            <a href="{{ url_for('main.subjects') }}" class="btn btn-outline btn-primary mr-4">Kembali ke Mata Pelajaran</a>
+            <a href="{{ url_for('main.home') }}" class="btn btn-primary">Laman Utama</a>
         </div>
     </div>
 </section>

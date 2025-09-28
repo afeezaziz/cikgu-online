@@ -1,0 +1,440 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom components for SPM Education Platform */
+@layer components {
+  /* Enhanced button styles */
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white border-0 font-semibold shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+
+  .btn-accent {
+    @apply bg-accent-600 hover:bg-accent-700 text-white border-0 font-semibold shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+
+  .btn-malaysia {
+    @apply bg-malaysia-blue hover:bg-malaysia-red text-white border-0 font-semibold shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+
+  .btn-subject-math {
+    @apply bg-subject-math hover:bg-blue-700 text-white border-0 font-semibold shadow-lg;
+  }
+
+  .btn-subject-science {
+    @apply bg-subject-science hover:bg-green-700 text-white border-0 font-semibold shadow-lg;
+  }
+
+  .btn-subject-language {
+    @apply bg-subject-language hover:bg-red-700 text-white border-0 font-semibold shadow-lg;
+  }
+
+  .btn-subject-history {
+    @apply bg-subject-history hover:bg-yellow-700 text-white border-0 font-semibold shadow-lg;
+  }
+
+  .form-input {
+    @apply input input-bordered w-full focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+
+  /* Hero sections */
+  .hero-gradient {
+    @apply bg-gradient-to-br from-primary-500/10 via-accent-500/5 to-education-wisdom/10;
+  }
+
+  .hero-malaysia {
+    @apply bg-malaysia-gradient bg-cover bg-center;
+  }
+
+  .hero-education {
+    @apply bg-education-gradient bg-cover bg-center;
+  }
+
+  .hero-spm {
+    @apply bg-spm-gradient bg-cover bg-center;
+  }
+
+  /* Text gradients */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent;
+  }
+
+  .text-malaysia {
+    @apply bg-gradient-to-r from-malaysia-blue via-malaysia-red to-malaysia-yellow bg-clip-text text-transparent;
+  }
+
+  .text-education {
+    @apply bg-gradient-to-r from-education-wisdom via-education-growth to-education-creativity bg-clip-text text-transparent;
+  }
+
+  /* Card styles */
+  .card-subject {
+    @apply card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-primary-500;
+  }
+
+  .card-chapter {
+    @apply card bg-base-100 shadow-md hover:shadow-lg transition-all duration-300 border border-base-300 hover:border-accent-500;
+  }
+
+  .card-achievement {
+    @apply card bg-gradient-to-br from-education-excellence/10 to-education-knowledge/10 shadow-lg;
+  }
+
+  .glass {
+    @apply backdrop-blur-lg bg-white/60 dark:bg-gray-800/60;
+  }
+
+  .glass-malaysia {
+    @apply backdrop-blur-lg bg-white/80 border border-malaysia-blue/20;
+  }
+
+  /* Progress indicators */
+  .progress-spm {
+    @apply progress progress-primary;
+  }
+
+  .progress-subject {
+    @apply progress h-3;
+  }
+
+  /* Badge styles */
+  .badge-subject {
+    @apply badge badge-outline font-semibold;
+  }
+
+  .badge-math {
+    @apply bg-subject-math/20 text-subject-math border-subject-math;
+  }
+
+  .badge-science {
+    @apply bg-subject-science/20 text-subject-science border-subject-science;
+  }
+
+  .badge-language {
+    @apply bg-subject-language/20 text-subject-language border-subject-language;
+  }
+
+  .badge-history {
+    @apply bg-subject-history/20 text-subject-history border-subject-history;
+  }
+
+  .badge-arts {
+    @apply bg-subject-arts/20 text-subject-arts border-subject-arts;
+  }
+
+  .badge-commerce {
+    @apply bg-subject-commerce/20 text-subject-commerce border-subject-commerce;
+  }
+
+  /* Alert styles */
+  .alert-education {
+    @apply alert border-l-4 border-l-primary-500 bg-primary-50;
+  }
+
+  .alert-success-spm {
+    @apply alert border-l-4 border-l-education-growth bg-education-growth/10;
+  }
+
+  .alert-warning-spm {
+    @apply alert border-l-4 border-l-education-excellence bg-education-excellence/10;
+  }
+
+  /* Navigation styles */
+  .nav-education {
+    @apply navbar bg-base-100 shadow-md border-b-2 border-primary-500;
+  }
+
+  .nav-subject {
+    @apply tabs tabs-lifted;
+  }
+
+  .tab-subject {
+    @apply tab tab-lifted hover:text-primary-600;
+  }
+
+  .tab-subject-active {
+    @apply tab tab-lifted tab-active text-primary-600 border-b-primary-600;
+  }
+
+  /* Interactive elements */
+  .interactive-card {
+    @apply transform hover:scale-105 transition-all duration-300 cursor-pointer;
+  }
+
+  .pulse-education {
+    animation: pulse-slow 2s infinite;
+  }
+
+  .gradient-animation {
+    @apply bg-gradient-to-r from-primary-500 via-accent-500 to-primary-500 bg-[length:200%_auto] animate-gradient-shift;
+  }
+
+  /* Loading states */
+  .loading-spm {
+    @apply loading loading-spinner text-primary-600;
+  }
+
+  .loading-overlay {
+    @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm;
+  }
+
+  /* Form enhancements */
+  .form-group {
+    @apply form-control w-full mb-4;
+  }
+
+  .form-label {
+    @apply label label-text font-semibold text-primary-700;
+  }
+
+  .input-education {
+    @apply input input-bordered focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+  }
+
+  .select-education {
+    @apply select select-bordered focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+  }
+
+  .textarea-education {
+    @apply textarea textarea-bordered focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+  }
+
+  /* Dashboard components */
+  .stat-card {
+    @apply stat bg-gradient-to-br from-primary-50 to-accent-50 shadow-lg border border-primary-200;
+  }
+
+  .stat-title-custom {
+    @apply stat-title text-primary-700 font-semibold;
+  }
+
+  .stat-value-custom {
+    @apply stat-value text-primary-900 font-bold;
+  }
+
+  /* Assessment components */
+  .assessment-card {
+    @apply card bg-base-100 shadow-lg border-l-4 border-l-accent-500;
+  }
+
+  .quiz-option {
+    @apply btn btn-outline btn-block justify-start hover:bg-accent-500 hover:text-white;
+  }
+
+  .quiz-option-selected {
+    @apply btn btn-accent btn-block justify-start;
+  }
+
+  /* Subject icons */
+  .icon-subject {
+    @apply w-6 h-6 inline-block mr-2;
+  }
+
+  .icon-math {
+    @apply text-subject-math;
+  }
+
+  .icon-science {
+    @apply text-subject-science;
+  }
+
+  .icon-language {
+    @apply text-subject-language;
+  }
+
+  .icon-history {
+    @apply text-subject-history;
+  }
+
+  .icon-arts {
+    @apply text-subject-arts;
+  }
+
+  .icon-commerce {
+    @apply text-subject-commerce;
+  }
+}
+
+/* Custom utilities for SPM Education Platform */
+@layer utilities {
+  /* HTMX indicators */
+  .htmx-indicator {
+    @apply opacity-0 transition-opacity duration-300;
+  }
+
+  .htmx-request .htmx-indicator {
+    @apply opacity-100;
+  }
+
+  .htmx-request.htmx-indicator {
+    @apply opacity-100;
+  }
+
+  /* Animation utilities */
+  .fade-in {
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .slide-in {
+    animation: slideIn 0.5s ease-out;
+  }
+
+  .bounce-gentle {
+    animation: bounce-slow 2s infinite;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent;
+  }
+
+  /* Background utilities */
+  .bg-malaysia-flag {
+    background-image: linear-gradient(135deg, #0033A0 0%, #0033A0 33.33%, #FFFFFF 33.33%, #FFFFFF 66.66%, #CC0001 66.66%, #CC0001 100%);
+  }
+
+  .bg-subject-pattern {
+    background-image:
+      radial-gradient(circle at 25% 25%, #6366f1 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, #22c55e 0%, transparent 50%);
+  }
+
+  /* Shadow utilities */
+  .shadow-education {
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1), 0 10px 10px -5px rgba(99, 102, 241, 0.04);
+  }
+
+  .shadow-malaysia {
+    box-shadow: 0 10px 25px -5px rgba(0, 51, 160, 0.15), 0 10px 10px -5px rgba(0, 51, 160, 0.06);
+  }
+
+  /* Border utilities */
+  .border-subject {
+    @apply border-2;
+  }
+
+  .border-math {
+    border-color: #2563eb;
+  }
+
+  .border-science {
+    border-color: #16a34a;
+  }
+
+  .border-language {
+    border-color: #dc2626;
+  }
+
+  .border-history {
+    border-color: #ca8a04;
+  }
+
+  .border-arts {
+    border-color: #9333ea;
+  }
+
+  .border-commerce {
+    border-color: #059669;
+  }
+
+  /* Size utilities */
+  .text-spm-title {
+    @apply text-4xl font-bold text-primary-800;
+  }
+
+  .text-spm-subtitle {
+    @apply text-2xl font-semibold text-primary-600;
+  }
+
+  .text-spm-body {
+    @apply text-base text-gray-700 leading-relaxed;
+  }
+
+  /* Responsive utilities */
+  .grid-subjects {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+
+  .grid-chapters {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4;
+  }
+
+  .grid-dashboard {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4;
+  }
+
+  /* Spacing utilities */
+  .container-education {
+    @apply container mx-auto px-4 py-8 max-w-7xl;
+  }
+
+  .section-padding {
+    @apply py-12 px-4;
+  }
+}
+
+/* HTMX specific styles */
+.htmx-swapping {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.htmx-added {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Loading states */
+.loading-overlay {
+  @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
+}
+
+.loading-spinner-lg {
+  @apply loading loading-spinner loading-lg;
+}
+
+/* Smooth transitions for HTMX */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Print styles for SPM materials */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-break {
+    page-break-before: always;
+  }
+
+  .print-avoid {
+    page-break-inside: avoid;
+  }
+}
+
+/* HTMX specific styles */
+.htmx-swapping {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.htmx-added {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Loading states */
+.loading-overlay {
+  @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
+}
+
+.loading-spinner-lg {
+  @apply loading loading-spinner loading-lg;
+}
+
+/* Smooth transitions for HTMX */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}

@@ -1,0 +1,15 @@
+{
+  "name": "cikgu-website",
+  "version": "1.0.0",
+  "description": "SPM Online Learning Platform - Tailwind CSS build",
+  "scripts": {
+    "build": "tailwindcss -i ./static/src/input.css -o ./static/css/output.css",
+    "build-css": "tailwindcss -i ./static/src/input.css -o ./static/css/output.css",
+    "watch-css": "tailwindcss -i ./static/src/input.css -o ./static/css/output.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
+    "daisyui": "^4.12.10",
+    "tailwindcss": "^3.4.1"
+  }
+}

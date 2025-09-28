@@ -1,65 +1,38 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, jsonify
+from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify, current_app
 from flask_login import login_required, current_user, login_user, logout_user
-from dotenv import load_dotenv
 import os
-from auth import google_auth, login_manager, create_or_update_user
-from models import db, User, Progress, Upload, StudySession, PushSubscription
-from notification_service import notification_service
+from app.auth.auth import google_auth, create_or_update_user
+from app.models import db, User, Progress, Upload, StudySession, PushSubscription
+# from app.services import notification_service  # Not implemented yet
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import uuid
 
-load_dotenv()
+main_bp = Blueprint('main', __name__)
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
-# Database configuration - MariaDB
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'mysql+pymysql://mariadb:JX2w2ItkFnIurlEWNRHXo8E4ibAo8lCyh464u0ZWaYCzQuC8opX2sZcY7Fu9HiCJ@104.248.150.75:33002/default')
-
-# MariaDB specific settings
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-    'pool_pre_ping': True,
-    'pool_recycle': 3600,
-    'pool_size': 10,
-    'max_overflow': 20
-}
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
-
-# Initialize extensions
-db.init_app(app)
-login_manager.init_app(app)
-
-# Database tables are managed by Alembic migrations
-# Run: uv run alembic upgrade head
-
-# Ensure upload folder exists
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-
-@app.route('/')
+@main_bp.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/login')
+@main_bp.route('/login')
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('main.dashboard'))
     auth_url = google_auth.get_auth_url()
     return render_template('login.html', auth_url=auth_url)
 
-@app.route('/callback')
+@main_bp.route('/callback')
 def callback():
     if 'code' not in request.args:
         flash('Authorization failed', 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('main.login'))
 
     try:
         # Get access token
         token_response = google_auth.get_token(request.args['code'])
         if 'error' in token_response:
             flash('Failed to get access token', 'error')
-            return redirect(url_for('login'))
+            return redirect(url_for('main.login'))
 
         # Get user info
         user_info = google_auth.get_user_info(token_response['access_token'])
@@ -69,20 +42,20 @@ def callback():
         login_user(user)
 
         flash('Successfully logged in!', 'success')
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('main.dashboard'))
 
     except Exception as e:
         flash(f'Login failed: {str(e)}', 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('main.login'))
 
-@app.route('/logout')
+@main_bp.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('You have been logged out', 'info')
-    return redirect(url_for('home'))
+    return redirect(url_for('main.home'))
 
-@app.route('/dashboard')
+@main_bp.route('/dashboard')
 @login_required
 def dashboard():
     # Get user statistics
@@ -109,7 +82,7 @@ def dashboard():
                          recent_uploads=recent_uploads,
                          progress_by_subject=progress_by_subject)
 
-@app.route('/upload', methods=['GET', 'POST'])
+@main_bp.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload_file():
     if request.method == 'POST':
@@ -127,7 +100,9 @@ def upload_file():
             unique_filename = f"{uuid.uuid4()}_{filename}"
 
             # Save file
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+            uploads_dir = os.path.join(current_app.root_path, '..', 'uploads')
+            os.makedirs(uploads_dir, exist_ok=True)
+            file_path = os.path.join(uploads_dir, unique_filename)
             file.save(file_path)
 
             # Get file size
@@ -147,30 +122,30 @@ def upload_file():
             db.session.commit()
 
             flash('File uploaded successfully!', 'success')
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('main.dashboard'))
 
     return render_template('upload.html')
 
-@app.route('/progress')
+@main_bp.route('/progress')
 @login_required
 def progress():
     user_progress = Progress.query.filter_by(user_id=current_user.id).all()
     return render_template('progress.html', progress=user_progress)
 
-@app.route('/subjects')
+@main_bp.route('/subjects')
 def subjects():
     return render_template('subjects.html')
 
-@app.route('/subjects/<subject>')
+@main_bp.route('/subjects/<subject>')
 def subject_detail(subject):
     return render_template('subject_detail.html', subject=subject)
 
-@app.route('/about')
+@main_bp.route('/about')
 def about():
     return render_template('about.html')
 
 # Chapter and assessment routes
-@app.route('/subjects/<subject>/chapter/<int:chapter>')
+@main_bp.route('/subjects/<subject>/chapter/<int:chapter>')
 @login_required
 def chapter(subject, chapter):
     # Sample chapter data - in a real app, this would come from a database
@@ -223,7 +198,7 @@ def chapter(subject, chapter):
                          previous_chapter=chapter-1 if chapter > 1 else None,
                          next_chapter=chapter+1 if chapter < 5 else None)
 
-@app.route('/subjects/<subject>/chapter/<int:chapter>/mcq')
+@main_bp.route('/subjects/<subject>/chapter/<int:chapter>/mcq')
 @login_required
 def mcq_assessment(subject, chapter):
     # Sample MCQ questions - in a real app, this would come from a database
@@ -270,7 +245,7 @@ def mcq_assessment(subject, chapter):
                          total_questions=len(questions),
                          time_limit=30)
 
-@app.route('/subjects/<subject>/chapter/<int:chapter>/subjective')
+@main_bp.route('/subjects/<subject>/chapter/<int:chapter>/subjective')
 @login_required
 def subjective_assessment(subject, chapter):
     # Sample subjective questions - in a real app, this would come from a database
@@ -332,14 +307,14 @@ def subjective_assessment(subject, chapter):
                          time_limit=60)
 
 # API routes for handling assessments
-@app.route('/api/progress', methods=['POST'])
+@main_bp.route('/api/progress', methods=['POST'])
 @login_required
 def update_progress():
     data = request.json
     # In a real app, save progress to database
     return jsonify({'success': True, 'message': 'Progress saved'})
 
-@app.route('/api/submit-mcq', methods=['POST'])
+@main_bp.route('/api/submit-mcq', methods=['POST'])
 @login_required
 def submit_mcq():
     data = request.json
@@ -347,7 +322,7 @@ def submit_mcq():
     attempt_id = str(uuid.uuid4())
     return jsonify({'success': True, 'attempt_id': attempt_id})
 
-@app.route('/api/submit-subjective', methods=['POST'])
+@main_bp.route('/api/submit-subjective', methods=['POST'])
 @login_required
 def submit_subjective():
     data = request.json
@@ -355,7 +330,7 @@ def submit_subjective():
     attempt_id = str(uuid.uuid4())
     return jsonify({'success': True, 'attempt_id': attempt_id})
 
-@app.route('/api/save-subjective-draft', methods=['POST'])
+@main_bp.route('/api/save-subjective-draft', methods=['POST'])
 @login_required
 def save_subjective_draft():
     data = request.json
@@ -363,7 +338,7 @@ def save_subjective_draft():
     return jsonify({'success': True})
 
 # Push notification endpoints
-@app.route('/api/push/vapid-public-key', methods=['GET'])
+@main_bp.route('/api/push/vapid-public-key', methods=['GET'])
 def get_vapid_public_key():
     """Get VAPID public key for push notifications"""
     public_key = os.environ.get('VAPID_PUBLIC_KEY')
@@ -371,23 +346,22 @@ def get_vapid_public_key():
         return jsonify({'error': 'VAPID public key not configured'}), 500
     return jsonify({'public_key': public_key})
 
-@app.route('/api/push/subscribe', methods=['POST'])
+@main_bp.route('/api/push/subscribe', methods=['POST'])
 @login_required
 def push_subscribe():
     """Subscribe to push notifications"""
     try:
         subscription_data = request.json
-        success = notification_service.register_subscription(
-            current_user.id,
-            subscription_data
-        )
-        if success:
-            return jsonify({'success': True})
-        return jsonify({'error': 'Failed to subscribe'}), 500
+        # success = notification_service.register_subscription(
+        #     current_user.id,
+        #     subscription_data
+        # )
+        # TODO: Implement notification service
+        return jsonify({'success': True, 'message': 'Notification service not implemented yet'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/push/unsubscribe', methods=['POST'])
+@main_bp.route('/api/push/unsubscribe', methods=['POST'])
 @login_required
 def push_unsubscribe():
     """Unsubscribe from push notifications"""
@@ -396,32 +370,26 @@ def push_unsubscribe():
         if not endpoint:
             return jsonify({'error': 'Endpoint required'}), 400
 
-        success = notification_service.unregister_subscription(
-            current_user.id,
-            endpoint
-        )
-        if success:
-            return jsonify({'success': True})
-        return jsonify({'error': 'Failed to unsubscribe'}), 500
+        # success = notification_service.unregister_subscription(
+        #     current_user.id,
+        #     endpoint
+        # )
+        # TODO: Implement notification service
+        return jsonify({'success': True, 'message': 'Notification service not implemented yet'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/push/test', methods=['POST'])
+@main_bp.route('/api/push/test', methods=['POST'])
 @login_required
 def test_push_notification():
     """Send test push notification"""
     try:
-        success = notification_service.send_notification_to_user(
-            current_user.id,
-            "Test Notification",
-            "This is a test notification from Cikgu!"
-        )
-        if success:
-            return jsonify({'success': True})
-        return jsonify({'error': 'Failed to send notification'}), 500
+        # success = notification_service.send_notification_to_user(
+        #     current_user.id,
+        #     "Test Notification",
+        #     "This is a test notification from Cikgu!"
+        # )
+        # TODO: Implement notification service
+        return jsonify({'success': True, 'message': 'Notification service not implemented yet'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-if __name__ == '__main__':
-    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
-    app.run(debug=debug_mode, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))

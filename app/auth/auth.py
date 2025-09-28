@@ -1,11 +1,10 @@
 import os
 import requests
 from flask import redirect, url_for, session, request, jsonify
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from models import db, User
+from flask_login import login_user, logout_user, login_required, current_user
+from app.models import db, User
+from app import login_manager
 from datetime import datetime
-
-login_manager = LoginManager()
 
 class GoogleAuth:
     def __init__(self):
@@ -51,7 +50,7 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return redirect(url_for('login'))
+    return redirect(url_for('main.login'))
 
 def create_or_update_user(user_info):
     user = User.query.filter_by(google_id=user_info['id']).first()
@@ -76,3 +75,7 @@ def create_or_update_user(user_info):
 
     db.session.commit()
     return user
+
+def init_auth():
+    """Initialize auth routes and user loader"""
+    return login_manager

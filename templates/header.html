@@ -1,64 +1,157 @@
-<header class="bg-primary text-primary-content shadow-lg">
-    <div class="navbar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="navbar-start">
-            <div class="dropdown">
-                <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
-                    </svg>
-                </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                    <li><a href="{{ url_for('home') }}" class="text-primary">Laman Utama</a></li>
-                    <li><a href="{{ url_for('subjects') }}" class="text-primary">Mata Pelajaran</a></li>
-                    {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('dashboard') }}" class="text-primary">Dashboard</a></li>
-                    <li><a href="{{ url_for('progress') }}" class="text-primary">Kemajuan</a></li>
-                    <li><a href="{{ url_for('upload_file') }}" class="text-primary">Upload</a></li>
-                    {% endif %}
-                    <li><a href="{{ url_for('about') }}" class="text-primary">Tentang Kami</a></li>
-                </ul>
-            </div>
-            <a href="{{ url_for('home') }}" class="btn btn-ghost text-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-                Cikgu
-            </a>
-        </div>
-        <div class="navbar-center hidden lg:flex">
-            <ul class="menu menu-horizontal px-1">
-                <li><a href="{{ url_for('home') }}" class="text-primary-content font-medium">Laman Utama</a></li>
-                <li><a href="{{ url_for('subjects') }}" class="text-primary-content font-medium">Mata Pelajaran</a></li>
-                {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('dashboard') }}" class="text-primary-content font-medium">Dashboard</a></li>
-                <li><a href="{{ url_for('progress') }}" class="text-primary-content font-medium">Kemajuan</a></li>
-                {% endif %}
-                <li><a href="{{ url_for('about') }}" class="text-primary-content font-medium">Tentang Kami</a></li>
-            </ul>
-        </div>
-        <div class="navbar-end">
-            {% if current_user.is_authenticated %}
-            <div class="dropdown dropdown-end">
-                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-                    {% if current_user.picture %}
-                        <img src="{{ current_user.picture }}" alt="Profile" class="w-8 h-8 rounded-full">
-                    {% else %}
-                        <div class="w-8 h-8 rounded-full bg-primary-content flex items-center justify-center">
-                            <span class="text-primary font-semibold text-sm">{{ current_user.name[0].upper() }}</span>
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
+    <!-- Top Bar with Malaysia Flag Pattern -->
+    <div class="h-1 bg-gradient-to-r from-blue-700 via-red-600 to-yellow-400"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo and Brand -->
+            <div class="flex items-center">
+                <a href="{{ url_for('main.home') }}" class="flex items-center space-x-3 group">
+                    <div class="relative">
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-red-600 rounded-lg flex items-center justify-center transform group-hover:rotate-3 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
                         </div>
-                    {% endif %}
-                </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                    <li class="menu-title">{{ current_user.name }}</li>
-                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-                    <li><a href="{{ url_for('upload_file') }}">Upload Fail</a></li>
-                    <li><a href="{{ url_for('progress') }}">Kemajuan</a></li>
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                </ul>
+                        <div class="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 via-red-600 to-yellow-500 bg-clip-text text-transparent">Cikgu</span>
+                        <p class="text-xs text-gray-500">SPM Learning Platform</p>
+                    </div>
+                </a>
             </div>
-            {% else %}
-            <a href="{{ url_for('login') }}" class="btn btn-secondary">Login</a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="{{ url_for('main.home') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 relative group">
+                    Laman Utama
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="{{ url_for('main.subjects') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 relative group">
+                    Mata Pelajaran
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.dashboard') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 relative group">
+                    Dashboard
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="{{ url_for('main.progress') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 relative group">
+                    Kemajuan
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                {% endif %}
+                <a href="{{ url_for('main.about') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 relative group">
+                    Tentang Kami
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+            </nav>
+
+            <!-- User Actions -->
+            <div class="flex items-center space-x-4">
+                {% if current_user.is_authenticated %}
+                <!-- User Profile Dropdown -->
+                <div class="relative dropdown dropdown-end">
+                    <div tabindex="0" role="button" class="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                        {% if current_user.picture %}
+                            <img src="{{ current_user.picture }}" alt="Profile" class="w-8 h-8 rounded-full border-2 border-gray-200">
+                        {% else %}
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-sm">
+                                {{ current_user.name[0].upper() }}
+                            </div>
+                        {% endif %}
+                        <div class="hidden md:block text-left">
+                            <p class="text-sm font-medium text-gray-900">{{ current_user.name }}</p>
+                            <p class="text-xs text-gray-500">Pelajar SPM</p>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <ul tabindex="0" class="menu menu-sm dropdown-content mt-2 z-[1] p-2 shadow-xl bg-white rounded-xl border border-gray-200 w-56">
+                        <li class="menu-title text-gray-700">{{ current_user.name }}</li>
+                        <li>
+                            <a href="{{ url_for('main.dashboard') }}" class="flex items-center space-x-3 hover:bg-blue-50 rounded-lg">
+                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                </svg>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('main.upload_file') }}" class="flex items-center space-x-3 hover:bg-green-50 rounded-lg">
+                                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                </svg>
+                                <span>Upload Fail</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('main.progress') }}" class="flex items-center space-x-3 hover:bg-purple-50 rounded-lg">
+                                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                                <span>Kemajuan</span>
+                            </a>
+                        </li>
+                        <li class="border-t border-gray-200 mt-2 pt-2">
+                            <a href="{{ url_for('main.logout') }}" class="flex items-center space-x-3 hover:bg-red-50 rounded-lg text-red-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                </svg>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                {% else %}
+                <!-- Login Button -->
+                <a href="{{ url_for('main.login') }}" class="bg-gradient-to-r from-blue-600 to-red-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center space-x-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                    </svg>
+                    <span>Login</span>
+                </a>
+                {% endif %}
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-50 transition-colors duration-200" onclick="mobileMenuToggle()">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-200">
+        <div class="px-4 py-3 space-y-2">
+            <a href="{{ url_for('main.home') }}" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors duration-200">
+                Laman Utama
+            </a>
+            <a href="{{ url_for('main.subjects') }}" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors duration-200">
+                Mata Pelajaran
+            </a>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('main.dashboard') }}" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors duration-200">
+                Dashboard
+            </a>
+            <a href="{{ url_for('main.progress') }}" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors duration-200">
+                Kemajuan
+            </a>
             {% endif %}
+            <a href="{{ url_for('main.about') }}" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors duration-200">
+                Tentang Kami
+            </a>
         </div>
     </div>
 </header>
+
+<script>
+function mobileMenuToggle() {
+    const menu = document.getElementById('mobileMenu');
+    menu.classList.toggle('hidden');
+}
+</script>

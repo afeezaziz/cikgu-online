@@ -1,0 +1,219 @@
+<!-- HTMX + DaisyUI Examples -->
+
+<!-- Basic HTMX Form with DaisyUI -->
+<div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+        <h2 class="card-title">HTMX Form Example</h2>
+
+        <!-- Auto-updating form -->
+        <form hx-post="/api/submit-form" hx-target="#form-result" hx-indicator="#form-loading">
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Name</span>
+                </label>
+                <input type="text" name="name" class="input input-bordered" required>
+            </div>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Email</span>
+                </label>
+                <input type="email" name="email" class="input input-bordered" required>
+            </div>
+
+            <div class="form-control mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <span id="form-loading" class="htmx-indicator loading loading-spinner loading-sm"></span>
+                    Submit
+                </button>
+            </div>
+        </form>
+
+        <div id="form-result" class="mt-4"></div>
+    </div>
+</div>
+
+<!-- Real-time Search with Debounce -->
+<div class="card bg-base-100 shadow-xl mt-6">
+    <div class="card-body">
+        <h2 class="card-title">Real-time Search</h2>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Search Subjects</span>
+            </label>
+            <input
+                type="text"
+                name="search"
+                class="input input-bordered"
+                hx-get="/api/search-subjects"
+                hx-trigger="keyup changed delay:500ms"
+                hx-target="#search-results"
+                hx-indicator="#search-loading"
+                placeholder="Type to search..."
+            >
+            <div id="search-loading" class="htmx-indicator loading loading-spinner loading-sm mt-2"></div>
+        </div>
+
+        <div id="search-results" class="mt-4"></div>
+    </div>
+</div>
+
+<!-- Infinite Scroll -->
+<div class="card bg-base-100 shadow-xl mt-6">
+    <div class="card-body">
+        <h2 class="card-title">Infinite Scroll</h2>
+
+        <div id="items-container" hx-get="/api/load-more-items" hx-trigger="revealed" hx-swap="beforeend">
+            <!-- Items will be loaded here -->
+        </div>
+
+        <div id="loading-more" class="htmx-indicator text-center py-4 hidden">
+            <span class="loading loading-spinner loading-lg"></span>
+        </div>
+    </div>
+</div>
+
+<!-- Progress Tracking -->
+<div class="card bg-base-100 shadow-xl mt-6">
+    <div class="card-body">
+        <h2 class="card-title">Progress Tracking</h2>
+
+        <div class="progress progress-primary w-full" role="progressbar" value="0" max="100">
+            <div class="progress-bar" style="width: 0%"></div>
+        </div>
+
+        <button
+            class="btn btn-accent mt-4"
+            hx-post="/api/update-progress"
+            hx-target="#progress-result"
+            hx-indicator="#progress-loading"
+        >
+            <span id="progress-loading" class="htmx-indicator loading loading-spinner loading-sm"></span>
+            Update Progress
+        </button>
+
+        <div id="progress-result" class="mt-4"></div>
+    </div>
+</div>
+
+<!-- Modal Example -->
+<div class="card bg-base-100 shadow-xl mt-6">
+    <div class="card-body">
+        <h2 class="card-title">Modal Example</h2>
+
+        <button
+            class="btn btn-primary"
+            hx-get="/api/modal-content"
+            hx-target="#modal-content"
+            onclick="openModal('')"
+        >
+            Open Modal
+        </button>
+    </div>
+</div>
+
+<!-- Tabs with HTMX -->
+<div class="card bg-base-100 shadow-xl mt-6">
+    <div class="card-body">
+        <h2 class="card-title">Dynamic Tabs</h2>
+
+        <div class="tabs tabs-boxed">
+            <a
+                class="tab tab-active"
+                hx-get="/api/tab-content?tab=overview"
+                hx-target="#tab-content"
+                hx-indicator="#tab-loading"
+            >
+                Overview
+            </a>
+            <a
+                class="tab"
+                hx-get="/api/tab-content?tab=details"
+                hx-target="#tab-content"
+                hx-indicator="#tab-loading"
+            >
+                Details
+            </a>
+            <a
+                class="tab"
+                hx-get="/api/tab-content?tab=settings"
+                hx-target="#tab-content"
+                hx-indicator="#tab-loading"
+            >
+                Settings
+            </a>
+        </div>
+
+        <div id="tab-loading" class="htmx-indicator loading loading-spinner loading-sm mt-2"></div>
+        <div id="tab-content" class="mt-4"></div>
+    </div>
+</div>
+
+<!-- Real-time Notifications -->
+<div class="card bg-base-100 shadow-xl mt-6">
+    <div class="card-body">
+        <h2 class="card-title">Real-time Notifications</h2>
+
+        <button
+            class="btn btn-secondary"
+            hx-get="/api/notifications"
+            hx-trigger="every 5s"
+            hx-target="#notifications-list"
+            hx-swap="innerHTML"
+        >
+            <span class="htmx-indicator loading loading-spinner loading-sm"></span>
+            Check Notifications
+        </button>
+
+        <div id="notifications-list" class="mt-4 space-y-2"></div>
+    </div>
+</div>
+
+<!-- Confirm Dialog Example -->
+<div class="card bg-base-100 shadow-xl mt-6">
+    <div class="card-body">
+        <h2 class="card-title">Confirm Dialog</h2>
+
+        <button
+            class="btn btn-error"
+            onclick="showConfirm('Are you sure you want to delete this item?', function() {
+                htmx.ajax('POST', '/api/delete-item', {target: '#delete-result'});
+            })"
+        >
+            Delete Item
+        </button>
+
+        <div id="delete-result" class="mt-4"></div>
+    </div>
+</div>
+
+<!-- File Upload with Progress -->
+<div class="card bg-base-100 shadow-xl mt-6">
+    <div class="card-body">
+        <h2 class="card-title">File Upload with Progress</h2>
+
+        <form
+            hx-post="/api/upload-file"
+            hx-target="#upload-result"
+            hx-encoding="multipart/form-data"
+            hx-indicator="#upload-loading"
+        >
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Choose File</span>
+                </label>
+                <input type="file" name="file" class="file-input file-input-bordered" required>
+            </div>
+
+            <div class="form-control mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <span id="upload-loading" class="htmx-indicator loading loading-spinner loading-sm"></span>
+                    Upload
+                </button>
+            </div>
+        </form>
+
+        <div id="upload-result" class="mt-4"></div>
+    </div>
+</div>

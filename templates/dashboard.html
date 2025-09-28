@@ -20,7 +20,7 @@
                             <span class="text-primary-content font-semibold">{{ current_user.name[0].upper() }}</span>
                         </div>
                     {% endif %}
-                    <a href="{{ url_for('logout') }}" class="btn btn-ghost btn-sm">
+                    <a href="{{ url_for('main.logout') }}" class="btn btn-ghost btn-sm">
                         Logout
                     </a>
                 </div>
@@ -97,13 +97,13 @@
                 <div class="card-body">
                     <h2 class="card-title text-xl mb-4">Tindakan Cepat</h2>
                     <div class="space-y-3">
-                        <a href="{{ url_for('upload_file') }}" class="btn btn-primary w-full">
+                        <a href="{{ url_for('main.upload_file') }}" class="btn btn-primary w-full">
                             📤 Upload Fail Pembelajaran
                         </a>
-                        <a href="{{ url_for('subjects') }}" class="btn btn-secondary w-full">
+                        <a href="{{ url_for('main.subjects') }}" class="btn btn-secondary w-full">
                             📚 Teruskan Belajar
                         </a>
-                        <a href="{{ url_for('progress') }}" class="btn btn-accent w-full">
+                        <a href="{{ url_for('main.progress') }}" class="btn btn-accent w-full">
                             📊 Lihat Kemajuan
                         </a>
                     </div>

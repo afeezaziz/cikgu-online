@@ -1,37 +1,99 @@
-<footer class="bg-neutral text-neutral-content py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="text-center md:text-left">
-                <h3 class="text-lg font-semibold mb-4">Cikgu</h3>
-                <p class="text-sm text-neutral-300">Platform pembelajaran online untuk persediaan SPM anda.</p>
-            </div>
-            <div class="text-center">
-                <h3 class="text-lg font-semibold mb-4">Pautan Pantas</h3>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="{{ url_for('home') }}" class="text-neutral-300 hover:text-white">Laman Utama</a></li>
-                    <li><a href="{{ url_for('subjects') }}" class="text-neutral-300 hover:text-white">Mata Pelajaran</a></li>
-                    <li><a href="{{ url_for('about') }}" class="text-neutral-300 hover:text-white">Tentang Kami</a></li>
-                </ul>
-            </div>
-            <div class="text-center md:text-right">
-                <h3 class="text-lg font-semibold mb-4">Hubungi Kami</h3>
-                <p class="text-sm text-neutral-300">Email: info@cikgu.my</p>
-                <div class="flex justify-center md:justify-end space-x-4 mt-4">
-                    <a href="#" class="text-neutral-300 hover:text-white">
-                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+<footer class="bg-gray-900 text-white relative">
+    <!-- Top Accent -->
+    <div class="h-1 bg-gradient-to-r from-blue-600 via-red-600 to-yellow-400"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Main Footer Content -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Brand Section -->
+            <div class="md:col-span-2">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-red-600 rounded-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                         </svg>
-                    </a>
-                    <a href="#" class="text-neutral-300 hover:text-white">
-                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
-                        </svg>
-                    </a>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold bg-gradient-to-r from-blue-400 via-red-400 to-yellow-400 bg-clip-text text-transparent">Cikgu</h3>
+                        <p class="text-xs text-gray-400">SPM Learning Platform</p>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm mb-4">
+                    Platform pembelajaran online komprehensif untuk persediaan SPM anda.
+                </p>
+
+                <!-- Compact Stats -->
+                <div class="flex space-x-6 mb-4">
+                    <div class="text-center">
+                        <div class="text-lg font-bold text-blue-400">10K+</div>
+                        <div class="text-xs text-gray-400">Pelajar</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-lg font-bold text-red-400">500+</div>
+                        <div class="text-xs text-gray-400">Modul</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-lg font-bold text-yellow-400">95%</div>
+                        <div class="text-xs text-gray-400">Kepuasan</div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h4 class="text-sm font-semibold text-white mb-3 uppercase tracking-wider">Pautan Pantas</h4>
+                <ul class="space-y-2">
+                    <li><a href="{{ url_for('main.home') }}" class="text-gray-300 hover:text-blue-400 text-sm transition-colors">Laman Utama</a></li>
+                    <li><a href="{{ url_for('main.subjects') }}" class="text-gray-300 hover:text-blue-400 text-sm transition-colors">Mata Pelajaran</a></li>
+                    <li><a href="{{ url_for('main.about') }}" class="text-gray-300 hover:text-blue-400 text-sm transition-colors">Tentang Kami</a></li>
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('main.dashboard') }}" class="text-gray-300 hover:text-blue-400 text-sm transition-colors">Dashboard</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Subjects -->
+            <div>
+                <h4 class="text-sm font-semibold text-white mb-3 uppercase tracking-wider">Mata Pelajaran</h4>
+                <ul class="space-y-2">
+                    <li><a href="{{ url_for('main.subject_detail', subject='bahasa-melayu') }}" class="text-gray-300 hover:text-red-400 text-sm transition-colors">Bahasa Melayu</a></li>
+                    <li><a href="{{ url_for('main.subject_detail', subject='english') }}" class="text-gray-300 hover:text-blue-400 text-sm transition-colors">Bahasa Inggeris</a></li>
+                    <li><a href="{{ url_for('main.subject_detail', subject='matematik') }}" class="text-gray-300 hover:text-green-400 text-sm transition-colors">Matematik</a></li>
+                    <li><a href="{{ url_for('main.subject_detail', subject='sains') }}" class="text-gray-300 hover:text-purple-400 text-sm transition-colors">Sains</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="border-t border-neutral-700 mt-8 pt-8 text-center text-sm text-neutral-300">
-            <p>&copy; 2024 Cikgu. Hak Cipta Terpelihara.</p>
+
+        <!-- Bottom Section -->
+        <div class="border-t border-gray-800 mt-6 pt-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-xs text-gray-400 mb-2 md:mb-0">
+                    &copy; 2024 Cikgu. Hak Cipta Terpelihara.
+                </div>
+
+                <!-- Social & Contact -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-3 text-xs text-gray-400">
+                        <span>info@cikgu.my</span>
+                        <span>|</span>
+                        <span>+60 123-456-7890</span>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="flex items-center space-x-2">
+                        <a href="#" class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition-all duration-200">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:text-white transition-all duration-200">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </footer>

@@ -4,11 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cikgu - {% block title %}SPM Online Learning{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        // Tailwind configuration for DaisyUI themes
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        accent: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="min-h-screen flex flex-col bg-base-200">
+<body class="min-h-screen flex flex-col bg-gray-50">
     {% include 'header.html' %}
 
     <main class="flex-1">
@@ -17,9 +44,9 @@
             {% if messages %}
                 <div class="fixed top-4 right-4 z-50 space-y-2">
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} shadow-lg">
-                            <span>{{ message }}</span>
-                            <button class="btn btn-sm btn-ghost btn-circle" onclick="this.parentElement.remove()">
+                        <div class="alert alert-{{ category }} shadow-lg border-l-4 {% if category == 'success' %}border-green-500 bg-green-50{% elif category == 'error' %}border-red-500 bg-red-50{% elif category == 'warning' %}border-yellow-500 bg-yellow-50{% else %}border-blue-500 bg-blue-50{% endif %}">
+                            <span class="font-medium">{{ message }}</span>
+                            <button class="btn btn-sm btn-ghost btn-circle hover:bg-gray-200" onclick="this.parentElement.remove()">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
@@ -35,6 +62,15 @@
 
     {% include 'footer.html' %}
 
+    <!-- HTMX and Utilities -->
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+
+    <!-- HTMX Components and Utilities -->
+    {% include 'htmx_components.html' %}
+
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/htmx-utils.js') }}"></script>
 </body>
 </html>

@@ -7,9 +7,9 @@
     <!-- Breadcrumb -->
     <nav class="text-sm mb-6">
         <ol class="flex items-center space-x-2">
-            <li><a href="{{ url_for('subjects') }}" class="text-primary hover:underline">Mata Pelajaran</a></li>
+            <li><a href="{{ url_for('main.subjects') }}" class="text-primary hover:underline">Mata Pelajaran</a></li>
             <li><span class="text-gray-400">/</span></li>
-            <li><a href="{{ url_for('subject_detail', subject=subject) }}" class="text-primary hover:underline">{{ subject }}</a></li>
+            <li><a href="{{ url_for('main.subject_detail', subject=subject) }}" class="text-primary hover:underline">{{ subject }}</a></li>
             <li><span class="text-gray-400">/</span></li>
             <li><span class="text-gray-600 font-medium">Bab {{ chapter_number }}</span></li>
         </ol>
